@@ -1,5 +1,6 @@
 import 'package:cardgame/providers/crazy_eights_game_provider.dart';
 import 'package:cardgame/providers/thirty_one_game_provider.dart';
+import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:cardgame/screens/game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => CrazyEightsGameProvider()),
         ChangeNotifierProvider(create: (_) => ThirtyOneGameProvider()),
+        ChangeNotifierProvider(create: (_) => WhotGameProvider()),
       ],
       child: const MyApp(),
     ),
