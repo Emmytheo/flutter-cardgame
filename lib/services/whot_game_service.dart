@@ -6,12 +6,16 @@ import 'package:cardgame/services/api_service.dart';
 import 'package:cardgame/services/whot_api_service.dart';
 
 class WhotGameService extends WhotApiService {
-  Future<GameModel> newGame([int deckCount = 1]) async {
-    final data = await httpGet(
+  Future<GameModel> newGame({int playerCount = 2}) async {
+    final data = await httpPost(
       '/games',
       // params: {'deck_count': deckCount},
+      body: {
+        'noOfPlayers': playerCount,
+      },
     );
 
+    // print(data);
     return GameModel.fromJson(data);
   }
 
@@ -21,7 +25,6 @@ class WhotGameService extends WhotApiService {
       // params: {'deck_count': deckCount},
     );
 
-    
     return GamesModel.fromJson(data);
   }
 

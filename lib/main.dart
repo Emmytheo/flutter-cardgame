@@ -33,7 +33,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Color(0xffeec295),
+        appBarTheme: AppBarTheme(backgroundColor: Color(0xff9a6851))
       ),
+
       home: const GameScreen(),
     );
   }

@@ -16,7 +16,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   // late final ThirtyOneGameProvider _gameProvider;
   // late final CrazyEightsGameProvider _gameProvider;
-  late final WhotGameProvider _gameProvider;
+  late WhotGameProvider _gameProvider;
 
   @override
   void initState() {
@@ -30,12 +30,33 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    // _gameProvider = Provider.of<WhotGameProvider>(context, listen: true);
+    // // print(_gameProvider.junk);
+    // _gameProvider.listGames();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     await _gameProvider.listGames();
+      //   },
+      //   foregroundColor: Colors.white,
+      //   backgroundColor: Color(0xff6d3935),
+      //   shape: CircleBorder(),
+      //   child: const Icon(Icons.add),
+      // ),
       appBar: AppBar(
+        centerTitle: true,
         title: _gameProvider.currentGame != null
             ? Text("Game ${_gameProvider.currentGame!.game_id}")
-            : const Text("Available Games"),
+            : const Text(
+                "Cha Cha Games",
+                style: TextStyle(color: Colors.white),
+              ),
         actions: [
           TextButton(
             onPressed: () async {
@@ -47,9 +68,14 @@ class _GameScreenState extends State<GameScreen> {
               // await _gameProvider.newGame(players);
               await _gameProvider.listGames();
             },
-            child: const Text(
-              "New Game",
-              style: TextStyle(color: Colors.white),
+            child: GestureDetector(
+              onTap: () async {
+                await _gameProvider.createNewGame();
+              },
+              child: const Text(
+                "New Game",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           )
         ],

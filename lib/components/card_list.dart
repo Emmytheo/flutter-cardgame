@@ -1,7 +1,9 @@
+import 'package:cardgame/components/dragged_playing_card.dart';
 import 'package:cardgame/components/playing_card.dart';
 import 'package:cardgame/constants.dart';
 import 'package:cardgame/models/card_model.dart';
 import 'package:cardgame/models/player_model.dart';
+import 'package:cardgame/models/whot_card_model.dart';
 import 'package:cardgame/models/whot_player_model.dart';
 import 'package:cardgame/models/whot_turn_model.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,7 @@ class CardList extends StatelessWidget {
     this.size = 1,
     this.onPlayCard,
     this.turn,
-    this.botCard = false
+    this.botCard = false,
   }) : super(key: key);
 
   @override
@@ -32,15 +34,54 @@ class CardList extends StatelessWidget {
         itemCount: player!.cards.length,
         itemBuilder: (context, index) {
           final card = player!.cards[index];
-          return PlayingCard(
-            card: card,
-            size: size,
-            // visible: player!.isHuman,
-            visible: player!.isHuman && botCard == false ? true : false,
-            onPlayCard: onPlayCard,
-            index: index,
-            turn: turn,
-          );
+          final isDraggable = turn!.currentPlayer == player;
+
+          return isDraggable 
+          && turn!.draggable!
+              ? Draggable<int>(
+                  // Data is the value this Draggable stores.
+                  data: index,
+                  childWhenDragging: PlayingCard(
+                    card: card,
+                    size: size,
+                    // visible: player!.isHuman,
+                    visible: player!.isHuman && botCard == false ? true : false,
+                    onPlayCard: onPlayCard,
+                    index: index,
+                    turn: turn,
+                    player: player,
+                  ),
+                  feedback: DraggedPlayingCard(
+                    card: card,
+                    size: size,
+                    // visible: player!.isHuman,
+                    visible: player!.isHuman && botCard == false ? true : false,
+                    onPlayCard: onPlayCard,
+                    index: index,
+                    turn: turn,
+                    player: player,
+                  ),
+                  child: PlayingCard(
+                    card: card,
+                    size: size,
+                    // visible: player!.isHuman,
+                    visible: player!.isHuman && botCard == false ? true : false,
+                    onPlayCard: onPlayCard,
+                    index: index,
+                    turn: turn,
+                    player: player,
+                  ),
+                )
+              : PlayingCard(
+                  card: card,
+                  size: size,
+                  // visible: player!.isHuman,
+                  visible: player!.isHuman && botCard == false ? true : false,
+                  onPlayCard: onPlayCard,
+                  index: index,
+                  turn: turn,
+                  player: player,
+                );
         },
       ),
     );

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:cardgame/components/create_whot_game_modal.dart';
 import 'package:cardgame/components/suit_chooser_modal.dart';
 import 'package:cardgame/constants.dart';
 import 'package:cardgame/main.dart';
@@ -14,6 +16,7 @@ import 'package:cardgame/models/whot_player_model.dart';
 import 'package:cardgame/models/whot_turn_model.dart';
 import 'package:cardgame/providers/game_provider.dart';
 import 'package:cardgame/services/whot_game_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -50,61 +53,6 @@ class WhotGameProvider extends GameProvider {
 
   bool gameStart = false;
 
-  Future<void> setupListeners(GameModel game) async {
-    _channel = WebSocketChannel.connect(
-        Uri.parse('ws://localhost:8800/game/${game.game_id}'));
-    await _channel.ready;
-
-    _channel.stream.listen((message) async {
-      Map<String, dynamic> _message =
-          Map<String, dynamic>.from(jsonDecode(message) as Map);
-
-      switch (_message['message']) {
-        case 'game:create':
-          player = WhotPlayerModel(
-              name: 'You',
-              id: _message['playerId'],
-              isHuman: true,
-              channel: _channel);
-          final games = await _service.listGames();
-          gameList = games;
-          if (currentGame!.game_id == _message['id']) {
-            currentGame!.players = _message['players'];
-            currentGame!.listeners = _message['listeners'];
-          }
-          break;
-
-        case 'game:start':
-          gameStart = true;
-          WhotCardModel discardd = WhotCardModel.fromJson(_message['pile']);
-          _discardz = [discardd];
-
-          break;
-
-        case 'player:hand':
-          print(_message);
-          player?.cards = List<WhotCardModel>.from(_message['hand']
-              .map((cardJson) => WhotCardModel.fromJson(cardJson)));
-
-          break;
-
-        case 'turn:switch':
-          // Switch to Player
-          whot_turn.currentPlayer = player;
-          break;
-
-        case 'pile:top':
-          break;
-
-        default:
-      }
-
-      notifyListeners();
-      // _channel.sink.add('received!');
-      // _channel.sink.close(status.goingAway);
-    });
-  }
-
   // Function to create a player and set up its channel listener
   Future<void> createPlayer(
       String name, bool isHuman, WebSocketChannel channel) async {
@@ -135,9 +83,11 @@ class WhotGameProvider extends GameProvider {
           break;
 
         case 'game:start':
+          print("Game Started");
+          print(_message);
           gameStart = true;
           WhotCardModel discardd = WhotCardModel.fromJson(_message['pile']);
-          _discardz = [discardd];
+          whot_turn.discardz = [discardd];
           break;
 
         case 'player:hand':
@@ -154,11 +104,21 @@ class WhotGameProvider extends GameProvider {
           print('Pile Top');
           print(_message);
           WhotCardModel discardd = WhotCardModel.fromJson(_message['card']);
-          _discardz = [discardd];
+          whot_turn.discardz = [discardd];
+          break;
+        
+        case 'player:play':
+          // Handle pile:top message if needed
+          print('Player ${_message['id']} Played');
+          print(_message);
+          WhotCardModel discardd = WhotCardModel.fromJson(_message['card']);
+          whot_turn.discardz = [discardd];
           break;
 
         default:
         // Handle any other messages if needed
+          print("Other Message");
+          print(_message);
       }
 
       notifyListeners();
@@ -196,7 +156,7 @@ class WhotGameProvider extends GameProvider {
         case 'game:start':
           // gameStart = true;
           WhotCardModel discardd = WhotCardModel.fromJson(_message['pile']);
-          _discardz = [discardd];
+          whot_turn.discardz = [discardd];
           break;
 
         case 'player:hand':
@@ -211,7 +171,7 @@ class WhotGameProvider extends GameProvider {
         case 'pile:top':
           // Handle pile:top message if needed
           WhotCardModel discardd = WhotCardModel.fromJson(_message['card']);
-          _discardz = [discardd];
+          whot_turn.discardz = [discardd];
           break;
 
         default:
@@ -222,15 +182,17 @@ class WhotGameProvider extends GameProvider {
     });
   }
 
-  Future<void> setupGameWithBots(GameModel game, {int maxPlayers = 4}) async {
+  Future<void> setupGame(GameModel game) async {
     // Set up the main player (human)
     WebSocketChannel mainChannel = WebSocketChannel.connect(
         Uri.parse('ws://localhost:8800/game/${game.game_id}'));
     await mainChannel.ready;
     await createPlayer('You', true, mainChannel);
+  }
 
+  Future<void> setupGameWithBots(GameModel game, {int? maxPlayers = 4}) async {
     // Create bot players
-    for (int i = 1; i < maxPlayers; i++) {
+    for (int i = 1; i < maxPlayers!; i++) {
       WebSocketChannel botChannel = WebSocketChannel.connect(
           Uri.parse('ws://localhost:8800/game/${game.game_id}'));
       await botChannel.ready;
@@ -240,6 +202,7 @@ class WhotGameProvider extends GameProvider {
 
   Future<void> listGames() async {
     final games = await _service.listGames();
+    // print(games.toJson());
     gameList = games;
     notifyListeners();
   }
@@ -247,6 +210,12 @@ class WhotGameProvider extends GameProvider {
   Future<void> setCurrentGame(GameModel game) async {
     currentGame = game;
     notifyListeners();
+  }
+
+  Future<GameModel> newWhotGame(int maxPlayers) async {
+    final new_game = await _service.newGame(playerCount: maxPlayers);
+    // notifyListeners();
+    return new_game;
   }
 
   @override
@@ -343,6 +312,16 @@ class WhotGameProvider extends GameProvider {
     notifyListeners();
   }
 
+  Future<void> createNewGame() async {
+    // showToast("Create new game!");
+    await showDialog(
+      context: navigatorKey.currentContext!,
+      builder: (_) => const CreateWhotGameModal(),
+      barrierDismissible: true,
+    );
+    notifyListeners();
+  }
+
   @override
   Future<void> botTurn() async {
     final p = turn.currentPlayer;
@@ -366,5 +345,83 @@ class WhotGameProvider extends GameProvider {
     }
 
     endTurn();
+  }
+
+  List<dynamic> get moreButtons {
+    return [
+      AnimatedToggleSwitch<bool>.dual(
+        current: whot_turn.draggable!,
+        first: false,
+        second: true,
+        spacing: 10.0,
+        indicatorSize: const Size.fromWidth(40.0),
+        // Size.zero,
+        style: const ToggleStyle(
+          borderColor: Color.fromARGB(0, 211, 179, 179),
+          backgroundColor: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 3,
+              blurRadius: 5,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        // borderWidth: 10.0,
+        height: 30,
+        loadingIconBuilder: (context, global) =>
+            const CupertinoActivityIndicator(color: Colors.white),
+        // onChanged: (b) {
+        //   setState(() =>
+        //       model.whot_turn.draggable = b);
+        //   return Future<dynamic>.delayed(
+        //       const Duration(seconds: 1));
+        // },
+        styleBuilder: (b) =>
+            ToggleStyle(indicatorColor: b ? Colors.green : Colors.grey),
+        iconBuilder: (value) => value
+            ? const Icon(
+                Icons.swipe_left,
+              )
+            : const Icon(
+                Icons.do_not_touch,
+              ),
+        textBuilder: (value) => value
+            ? const Center(
+                child: Text(
+                'On',
+                // style: const TextStyle(
+                //     fontSize: 12.0)
+              ))
+            : const Center(
+                child: Text(
+                'Off',
+                // style: const TextStyle(
+                //     fontSize: 12.0)
+              )),
+        // textBuilder: (value) => {return null}
+      )
+    ];
+  }
+
+  @override
+  // TODO: implement additionalButtons
+  List<ActionButton> get additionalButtons {
+    return [
+      ActionButton(
+        label: "Pick from Market",
+        onPressed: () {
+          whot_turn.drawCard();
+        },
+      ),
+      // ActionButton(
+      //   label: "Drag",
+      //   onPressed: () {
+      //     whot_turn.drawCard();
+      //   },
+      // ),
+    ];
   }
 }

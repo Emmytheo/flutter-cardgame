@@ -8,7 +8,7 @@ import 'package:cardgame/models/whot_turn_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class PlayingCard extends StatelessWidget {
+class DraggedPlayingCard extends StatelessWidget {
   final WhotCardModel card;
   final double size;
   final bool visible;
@@ -17,7 +17,7 @@ class PlayingCard extends StatelessWidget {
   final int index;
   final WhotPlayerModel? player;
 
-  PlayingCard(
+  DraggedPlayingCard(
       {Key? key,
       required this.card,
       this.size = 1,
@@ -68,23 +68,23 @@ class PlayingCard extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.center,
-                  child: Text("${card.shape}"),
+                  child: Text("${card.shape}", style: TextStyle(fontSize: 14.0),),
                 ),
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Text("${card.value}"),
+                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
                 ),
                 Align(
                   alignment: Alignment.topRight,
-                  child: Text("${card.value}"),
+                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Text("${card.value}"),
+                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: Text("${card.value}"),
+                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
                 ),
               ],
             ),

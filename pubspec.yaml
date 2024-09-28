@@ -41,6 +41,8 @@ dependencies:
   platform: ^3.1.0
   web_socket_channel: ^3.0.1
   flutter_svg: ^2.0.9
+  animated_toggle_switch: ^0.8.2
+  lite_rolling_switch: ^1.0.1
 
 dev_dependencies:
   flutter_test:
