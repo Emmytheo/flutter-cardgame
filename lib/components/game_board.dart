@@ -83,81 +83,81 @@ class _GameBoardState extends State<GameBoard> {
                         ],
                       ),
                     ),
-                    // Align(
-                    //     alignment: Alignment.topCenter,
-                    //     child: model.whot_turn.currentPlayer !=
-                    //             model.playerz![0]
-                    //         ? Column(
-                    //             mainAxisSize: MainAxisSize.min,
-                    //             children: [
-                    //               CardList(
-                    //                 player: model.whot_turn.currentPlayer,
-                    //                 turn: model.whot_turn,
-                    //                 botCard: true,
-                    //               ),
-                    //               Padding(
-                    //                 padding: const EdgeInsets.all(8.0),
-                    //                 child: (model.whot_turn.currentPlayer !=
-                    //                         model.playerz![0])
-                    //                     ? Row(
-                    //                         mainAxisAlignment:
-                    //                             MainAxisAlignment.spaceBetween,
-                    //                         children: [
-                    //                           ...model.additionalButtons
-                    //                               .map((button) => Padding(
-                    //                                     padding:
-                    //                                         const EdgeInsets
-                    //                                             .only(right: 4),
-                    //                                     child: ElevatedButton(
-                    //                                         onPressed: button
-                    //                                                 .enabled
-                    //                                             ? button
-                    //                                                 .onPressed
-                    //                                             : null,
-                    //                                         child: Text(
-                    //                                             button.label)),
-                    //                                   ))
-                    //                               .toList(),
-                    //                           Row(
-                    //                             children: [
-                    //                               model.whot_turn.draggable!
-                    //                                   ? const Icon(
-                    //                                       Icons.swipe_left,
-                    //                                     )
-                    //                                   : const Icon(
-                    //                                       Icons.do_not_touch,
-                    //                                     ),
-                    //                               Switch(
-                    //                                 // thumb color (round icon)
-                    //                                 activeColor: Colors.cyan,
-                    //                                 activeTrackColor:
-                    //                                     Colors.white,
-                    //                                 inactiveThumbColor: Colors
-                    //                                     .blueGrey.shade600,
-                    //                                 inactiveTrackColor:
-                    //                                     Colors.grey.shade400,
-                    //                                 splashRadius: 50.0,
-                    //                                 // boolean variable value
-                    //                                 value: model
-                    //                                     .whot_turn.draggable!,
-                    //                                 // changes the state of the switch
-                    //                                 onChanged: (bool newValue) {
-                    //                                   setState(() {
-                    //                                     model.whot_turn
-                    //                                             .draggable =
-                    //                                         newValue;
-                    //                                   });
-                    //                                 },
-                    //                               ),
-                    //                             ],
-                    //                           ),
-                    //                         ],
-                    //                       )
-                    //                     : Container(),
-                    //               ),
-                    //             ],
-                    //           )
-                    //         : Container()),
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: model.whot_turn.currentPlayer !=
+                                model.playerz![0]
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CardList(
+                                    player: model.whot_turn.currentPlayer,
+                                    turn: model.whot_turn,
+                                    botCard: true,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: (model.whot_turn.currentPlayer !=
+                                            model.playerz![0])
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              ...model.additionalButtons
+                                                  .map((button) => Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(right: 4),
+                                                        child: ElevatedButton(
+                                                            onPressed: button
+                                                                    .enabled
+                                                                ? button
+                                                                    .onPressed
+                                                                : null,
+                                                            child: Text(
+                                                                button.label)),
+                                                      ))
+                                                  .toList(),
+                                              Row(
+                                                children: [
+                                                  model.whot_turn.draggable!
+                                                      ? const Icon(
+                                                          Icons.swipe_left,
+                                                        )
+                                                      : const Icon(
+                                                          Icons.do_not_touch,
+                                                        ),
+                                                  Switch(
+                                                    // thumb color (round icon)
+                                                    activeColor: Colors.cyan,
+                                                    activeTrackColor:
+                                                        Colors.white,
+                                                    inactiveThumbColor: Colors
+                                                        .blueGrey.shade600,
+                                                    inactiveTrackColor:
+                                                        Colors.grey.shade400,
+                                                    splashRadius: 50.0,
+                                                    // boolean variable value
+                                                    value: model
+                                                        .whot_turn.draggable!,
+                                                    // changes the state of the switch
+                                                    onChanged: (bool newValue) {
+                                                      setState(() {
+                                                        model.whot_turn
+                                                                .draggable =
+                                                            newValue;
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        : Container(),
+                                  ),
+                                ],
+                              )
+                            : Container()),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Column(
@@ -350,8 +350,10 @@ class _GameBoardState extends State<GameBoard> {
                           ),
                           Text(
                             'You and ${model.currentGame!.players! - 1} Players Joined - Waiting for ${model.currentGame!.noOfPlayers! - model.currentGame!.players!} More',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.bold),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -383,7 +385,9 @@ class _GameBoardState extends State<GameBoard> {
                                     await model.setupGameWithBots(
                                         model.currentGame!,
                                         maxPlayers:
-                                            model.currentGame!.noOfPlayers! - model.currentGame!.players! + 1);
+                                            model.currentGame!.noOfPlayers! -
+                                                model.currentGame!.players! +
+                                                1);
                                   },
                                   child: const Text('Start Game with Bots'),
                                 ),

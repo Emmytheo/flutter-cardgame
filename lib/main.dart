@@ -1,9 +1,13 @@
 import 'package:cardgame/providers/crazy_eights_game_provider.dart';
 import 'package:cardgame/providers/thirty_one_game_provider.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
-import 'package:cardgame/screens/game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+// Screens
+import 'package:cardgame/screens/game_list_screen.dart';
+import 'package:cardgame/screens/draughts_menu_screen.dart';
+import 'package:cardgame/screens/draughts_game_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -34,10 +38,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Color(0xffeec295),
-        appBarTheme: AppBarTheme(backgroundColor: Color(0xff9a6851))
+        appBarTheme: AppBarTheme(backgroundColor: Color(0xff9a6851)),
       ),
-
-      home: const GameScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const GameListScreen(),
+        '/draughtsMenu': (context) => const DraughtsMenuScreen(),
+        '/draughtsGame': (context) => const DraughtsGameScreen(),
+      },
     );
   }
 }
