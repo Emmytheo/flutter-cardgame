@@ -1,6 +1,7 @@
 import 'package:cardgame/providers/crazy_eights_game_provider.dart';
 import 'package:cardgame/providers/thirty_one_game_provider.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
+import 'package:cardgame/providers/draughts_game_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,9 @@ void main() {
         ChangeNotifierProvider(create: (_) => CrazyEightsGameProvider()),
         ChangeNotifierProvider(create: (_) => ThirtyOneGameProvider()),
         ChangeNotifierProvider(create: (_) => WhotGameProvider()),
+        ChangeNotifierProvider(
+            create: (_) =>
+                DraughtsGameProvider()), // Added DraughtsGameProvider
       ],
       child: const MyApp(),
     ),
@@ -37,14 +41,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Color(0xffeec295),
-        appBarTheme: AppBarTheme(backgroundColor: Color(0xff9a6851)),
+        scaffoldBackgroundColor: const Color(0xffeec295),
+        appBarTheme: const AppBarTheme(backgroundColor: Color(0xff9a6851)),
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => const GameListScreen(),
-        '/draughtsMenu': (context) => const DraughtsMenuScreen(),
-        '/draughtsGame': (context) => const DraughtsGameScreen(),
+        '/draughtsMenu': (context) =>
+            const DraughtsMenuScreen(), // Route to DraughtsMenuScreen
+        '/draughtsGame': (context) =>
+            const DraughtsGameScreen(), // Route to DraughtsGameScreen
       },
     );
   }
