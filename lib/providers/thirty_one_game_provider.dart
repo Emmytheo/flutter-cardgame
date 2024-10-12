@@ -117,4 +117,5 @@ class ThirtyOneGameProvider extends GameProvider {
       ),
     ];
   }
+
 }
