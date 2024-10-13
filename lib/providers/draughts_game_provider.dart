@@ -226,8 +226,6 @@ class DraughtsGameProvider with ChangeNotifier {
       return checkWalkablePlayer1(Men.of(men, newCoor: newCoor), mode: newMode);
     });
 
-
-
     bool movableRight = checkWalkablePlayer1Right(men.coordinate, mode: mode,
         onKilling: (newCoor, killed) {
       int newMode = MODE_AFTER_KILLING;
@@ -277,6 +275,7 @@ class DraughtsGameProvider with ChangeNotifier {
             bool isKillable = onKilling(nextIfKilling, killed);
             getBlock(nextIfKilling).killableMore = isKillable;
           }
+          notifyListeners();
           return true;
         }
       }
@@ -394,17 +393,58 @@ class DraughtsGameProvider with ChangeNotifier {
   //   return board[coor.row][coor.col];
   // }
 
+  // void makeMove(Coordinate from, Coordinate to) {
+  //   BlockTable fromBlock = getBlock(from);
+  //   BlockTable toBlock = getBlock(to);
+
+  //   if (fromBlock.men == null || fromBlock.men!.player != currentPlayerTurn) {
+  //     print("Invalid move. It's not your piece.");
+  //     return;
+  //   }
+
+  //   // if ((from.row - to.row).abs() != 1 || (from.col - to.col).abs() != 1) {
+  //   //   print("Invalid move. Only one diagonal step allowed.");
+  //   //   return;
+  //   // }
+
+  //   if (toBlock.men != null) {
+  //     print("Invalid move. Target block is occupied.");
+  //     return;
+  //   }
+
+  //   // Handle killing
+  //   int midRow = (from.row + to.row) ~/ 2;
+  //   int midCol = (from.col + to.col) ~/ 2;
+  //   BlockTable middleBlock = getBlock(Coordinate(row: midRow, col: midCol));
+
+  //   if ((from.row - to.row).abs() == 2 &&
+  //       middleBlock.men != null &&
+  //       middleBlock.men!.player != currentPlayerTurn) {
+  //     killedMen.add(middleBlock.men!);
+  //     middleBlock.men = null;
+  //   }
+
+  //   toBlock.men = fromBlock.men;
+  //   toBlock.men!.coordinate = to;
+  //   fromBlock.men = null;
+
+  //   if (toBlock.men!.player == 1 && to.row == 7) {
+  //     toBlock.men!.isKing = true;
+  //   } else if (toBlock.men!.player == 2 && to.row == 0) {
+  //     toBlock.men!.isKing = true;
+  //   }
+
+  //   _sendGameStateToServer();
+  //   endTurn();
+  // }
+
   void makeMove(Coordinate from, Coordinate to) {
     BlockTable fromBlock = getBlock(from);
     BlockTable toBlock = getBlock(to);
+    bool validKill = false;
 
     if (fromBlock.men == null || fromBlock.men!.player != currentPlayerTurn) {
       print("Invalid move. It's not your piece.");
-      return;
-    }
-
-    if ((from.row - to.row).abs() != 1 || (from.col - to.col).abs() != 1) {
-      print("Invalid move. Only one diagonal step allowed.");
       return;
     }
 
@@ -414,29 +454,110 @@ class DraughtsGameProvider with ChangeNotifier {
     }
 
     // Handle killing
-    int midRow = (from.row + to.row) ~/ 2;
-    int midCol = (from.col + to.col) ~/ 2;
-    BlockTable middleBlock = getBlock(Coordinate(row: midRow, col: midCol));
+    int rowDifference = (from.row - to.row).abs();
+    int colDifference = (from.col - to.col).abs();
+    if (rowDifference == 2 && colDifference == 2) {
+      // Only allow kill moves if there's an enemy piece between the from and to
+      int midRow = (from.row + to.row) ~/ 2;
+      int midCol = (from.col + to.col) ~/ 2;
+      BlockTable middleBlock = getBlock(Coordinate(row: midRow, col: midCol));
 
-    if ((from.row - to.row).abs() == 2 &&
-        middleBlock.men != null &&
-        middleBlock.men!.player != currentPlayerTurn) {
-      killedMen.add(middleBlock.men!);
-      middleBlock.men = null;
+      if (middleBlock.men != null &&
+          middleBlock.men!.player != currentPlayerTurn) {
+        // Kill the enemy piece
+        killedMen.add(middleBlock.men!);
+        middleBlock.men = null;
+        validKill = true;
+      } else {
+        print("Invalid move. No enemy piece to capture.");
+        return;
+      }
+    } else if (fromBlock.men!.isKing == false && (rowDifference > 2 || colDifference > 2)) {
+      print("Invalid move. Only one diagonal step allowed, or a valid jump.");
+      return;
     }
 
+    // Move the piece
     toBlock.men = fromBlock.men;
     toBlock.men!.coordinate = to;
     fromBlock.men = null;
 
+    // Promote to king if it reaches the opposite end of the board
     if (toBlock.men!.player == 1 && to.row == 7) {
       toBlock.men!.isKing = true;
+      print("Player 1 piece promoted to King!");
     } else if (toBlock.men!.player == 2 && to.row == 0) {
       toBlock.men!.isKing = true;
+      print("Player 2 piece promoted to King!");
     }
 
+    // Check for consecutive kill possibility
+    if (validKill == true && _canKillAgain(toBlock.men!, to)) {
+      print("Consecutive kill available. You must make another move.");
+      return; // Don't end the turn, wait for another move
+    }
+
+    // Send game state to the server and end the turn if no consecutive kills
     _sendGameStateToServer();
     endTurn();
+  }
+
+  bool _canKillAgain(Men men, Coordinate from) {
+    List<Coordinate> possibleMoves = _getPossibleKillMoves(men, from);
+
+    for (Coordinate to in possibleMoves) {
+      int midRow = (from.row + to.row) ~/ 2;
+      int midCol = (from.col + to.col) ~/ 2;
+      BlockTable toBlock = getBlock(Coordinate(row: to.row, col: to.col));
+      BlockTable middleBlock = getBlock(Coordinate(row: midRow, col: midCol));
+      print(
+          'New Move = row:${to.row}, column: ${to.col}, Valid move: ${toBlock.men == null}');
+      if (toBlock.men == null) {
+        if (middleBlock.men != null &&
+            middleBlock.men!.player != currentPlayerTurn) {
+          return true; // Another kill is possible
+        }
+      } 
+    }
+    return false;
+  }
+
+  List<Coordinate> _getPossibleKillMoves(Men men, Coordinate from) {
+    List<Coordinate> killMoves = [];
+
+    // Get directions based on whether the piece is a king or a regular piece
+    List<List<int>> directions = men.isKing
+        ? [
+            [1, 1],
+            [1, -1],
+            [-1, 1],
+            [-1, -1]
+          ] // Kings can move in all diagonal directions
+        : men.player == 1
+            ? [
+                [1, 1],
+                [1, -1]
+              ] // Player 1 moves "down"
+            : [
+                [-1, 1],
+                [-1, -1]
+              ]; // Player 2 moves "up"
+
+    for (List<int> direction in directions) {
+      int newRow =
+          from.row + 2 * direction[0]; // Check 2 steps ahead for a jump
+      int newCol = from.col + 2 * direction[1];
+
+      if (isWithinBounds(newRow, newCol)) {
+        killMoves.add(Coordinate(row: newRow, col: newCol));
+      }
+    }
+
+    return killMoves;
+  }
+
+  bool isWithinBounds(int row, int col) {
+    return row >= 0 && row < 8 && col >= 0 && col < 8;
   }
 
   void endTurn() {

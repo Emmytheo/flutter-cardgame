@@ -11,6 +11,13 @@ class DraughtsGameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DraughtsGameProvider>(context, listen: false);
+    final Color colorBackgroundF = const Color(0xffeec295);
+    final Color colorBackgroundT = const Color(0xff9a6851);
+    final Color colorBorderTable = const Color(0xff6d3935);
+    final Color colorAppBar = const Color(0xff6d3935);
+    final Color colorBackgroundGame = const Color(0xffc16c34);
+    final Color colorBackgroundHighlight = Colors.blue[500]!;
+    final Color colorBackgroundHighlightAfterKilling = Colors.purple[500]!;
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   if (!provider.isMenInitialized) {
@@ -20,12 +27,12 @@ class DraughtsGameScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Draughts Game'),
+        title: const Text('Draughts Game'),
       ),
       body: Consumer<DraughtsGameProvider>(
         builder: (context, provider, child) {
           if (!provider.isGameStarted) {
-            return Center(
+            return const Center(
               child: Text('Waiting for the game to start...'),
             );
           } else if (provider.isGameStarted) {
@@ -42,12 +49,30 @@ class DraughtsGameScreen extends StatelessWidget {
                 provider.yourTurn
                     ? "It's your turn"
                     : "Waiting for opponent...",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Expanded(
                 child: Center(
                   child: buildGameTable(context, provider),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(color: colorAppBar, boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 3),
+                      blurRadius: 12)
+                ]),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    buildCurrentPlayerTurn(
+                      context,
+                      provider,
+                    )
+                  ],
                 ),
               ),
             ],
@@ -91,15 +116,6 @@ class DraughtsGameScreen extends StatelessWidget {
       colorBackground = Colors.blue[500]!;
     } else if (block.isHighlightAfterKilling) {
       colorBackground = Colors.purple[500]!;
-    } else {
-      // print(block.men);
-      // print(coor.row);
-      // print(coor.col);
-      // print(provider.isBlockTypeF(coor, 'opponent_piece'));
-      // Check if the block contains the player's piece
-      if (provider.isBlockTypeF(coor, 'your_piece')) {
-        colorBackground = Colors.brown[200]!;
-      }
     }
 
     // Men widget
@@ -107,7 +123,7 @@ class DraughtsGameScreen extends StatelessWidget {
     if (block.men != null) {
       Men men = block.men!;
       menWidget = Center(
-        child: buildMenWidget(player: men.player, isKing: men.isKing, size: 40),
+        child: buildMenWidget(player: men.player, isKing: men.isKing, size: 38),
       );
 
       // Make draggable only if it's the current player's turn and their piece
@@ -172,9 +188,12 @@ class DraughtsGameScreen extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: player == 1 ? Colors.black : Colors.white,
-        ),
+            shape: BoxShape.circle,
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
+            ],
+            color: player == 1 ? Colors.black54 : Colors.grey[100]),
         child:
             Icon(Icons.star, color: player == 1 ? Colors.white : Colors.black),
       );
@@ -184,9 +203,37 @@ class DraughtsGameScreen extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: player == 1 ? Colors.black : Colors.white,
-      ),
+          shape: BoxShape.circle,
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
+          ],
+          color: player == 1 ? Colors.black54 : Colors.grey[100]),
     );
+  }
+
+  Widget buildCurrentPlayerTurn(
+    BuildContext context,
+    DraughtsGameProvider provider,
+  ) {
+    if (provider.currentPlayerTurn != null) {
+      return Padding(
+          padding: EdgeInsets.all(12),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("Current turn".toUpperCase(),
+                    style: TextStyle(fontSize: 16, color: Colors.white)),
+                Padding(
+                    padding: EdgeInsets.all(6),
+                    child: buildMenWidget(
+                        player: provider.currentPlayerTurn ?? 1,
+                        size: 38 * 1.0))
+              ]));
+    } else {
+      return SizedBox(
+        height: 38,
+      );
+    }
   }
 }
