@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class PlayerCard extends StatelessWidget {
-  final WhotCardModel card;
+  // final WhotCardModel card;
   final double size;
   final bool visible;
   final Function(CardModel)? onPlayCard;
@@ -19,7 +19,7 @@ class PlayerCard extends StatelessWidget {
 
   PlayerCard(
       {Key? key,
-      required this.card,
+      // required this.card,
       this.size = 1,
       this.visible = false,
       this.onPlayCard,
@@ -31,11 +31,11 @@ class PlayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (turn!.currentPlayer == player) {
-          turn!.playCard(index);
-        }
-      },
+      // onTap: () {
+      //   if (turn!.currentPlayer == player) {
+      //     turn!.playCard(index);
+      //   }
+      // },
       child: Container(
           width: CARD_WIDTH * size,
           height: CARD_WIDTH * size,
@@ -68,7 +68,19 @@ class PlayerCard extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.center,
-                  child: Text("${player?.name}"),
+                  // child: Text("${player?.name}"),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.greenAccent[400],
+                    radius: 120,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.green,
+                      radius: 115,
+                      child: Text(
+                        "${player?.id}",
+                        style: TextStyle(fontSize: 25, color: Colors.white),
+                      ), //Text
+                    ),
+                  ),
                 ),
                 // Align(
                 //   alignment: Alignment.topLeft,

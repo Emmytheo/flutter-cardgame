@@ -2,6 +2,7 @@ import 'package:cardgame/providers/crazy_eights_game_provider.dart';
 import 'package:cardgame/providers/thirty_one_game_provider.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:cardgame/providers/draughts_game_provider.dart';
+import 'package:cardgame/screens/game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +52,8 @@ class MyApp extends StatelessWidget {
             const DraughtsMenuScreen(), // Route to DraughtsMenuScreen
         '/draughtsGame': (context) =>
             const DraughtsGameScreen(), // Route to DraughtsGameScreen
+        '/whotMenu': (context) =>
+            const GameScreen(), // Route to DraughtsMenuScreen
       },
     );
   }

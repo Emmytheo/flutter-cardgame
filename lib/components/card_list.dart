@@ -36,8 +36,7 @@ class CardList extends StatelessWidget {
           final card = player!.cards[index];
           final isDraggable = turn!.currentPlayer == player;
 
-          return isDraggable 
-          && turn!.draggable!
+          return isDraggable && turn!.draggable!
               ? Draggable<int>(
                   // Data is the value this Draggable stores.
                   data: index,

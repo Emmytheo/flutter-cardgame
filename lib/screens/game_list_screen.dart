@@ -25,8 +25,8 @@ class GameListScreen extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Whot'),
-            onTap: () {
-              // Add navigation to Whot game
+             onTap: () {
+              Navigator.pushNamed(context, '/whotMenu');
             },
           ),
           ListTile(

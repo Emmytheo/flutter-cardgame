@@ -79,6 +79,19 @@ class WhotGameProvider extends GameProvider {
             currentGame!.players = _message['players'];
             currentGame!.listeners = _message['listeners'];
           }
+          for (int i = 0; i < currentGame!.noOfPlayers!; i++) {
+            if (i != idx) {
+              var other_plyer = WhotPlayerModel(
+                name: 'player $i',
+                isHuman: false,
+                channel: channel,
+                id: i,
+                cards: []
+              );
+              playerz!.add(other_plyer);
+            }
+          }
+          print(playerz);
           // game.players = [player];
           break;
 
@@ -88,6 +101,7 @@ class WhotGameProvider extends GameProvider {
           gameStart = true;
           WhotCardModel discardd = WhotCardModel.fromJson(_message['pile']);
           whot_turn.discardz = [discardd];
+          print(playerz!.length);
           break;
 
         case 'player:hand':
@@ -106,7 +120,7 @@ class WhotGameProvider extends GameProvider {
           WhotCardModel discardd = WhotCardModel.fromJson(_message['card']);
           whot_turn.discardz = [discardd];
           break;
-        
+
         case 'player:play':
           // Handle pile:top message if needed
           print('Player ${_message['id']} Played');
@@ -116,7 +130,7 @@ class WhotGameProvider extends GameProvider {
           break;
 
         default:
-        // Handle any other messages if needed
+          // Handle any other messages if needed
           print("Other Message");
           print(_message);
       }

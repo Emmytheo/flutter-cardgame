@@ -15,6 +15,7 @@ class PlayerList extends StatelessWidget {
   final Function(CardModel)? onPlayCard;
   WhotTurn? turn;
   bool? botCard;
+  final List<WhotPlayerModel> otherPlayers;
 
   PlayerList({
     Key? key,
@@ -23,6 +24,7 @@ class PlayerList extends StatelessWidget {
     this.onPlayCard,
     this.turn,
     this.botCard = false,
+    required this.otherPlayers,
   }) : super(key: key);
 
   @override
@@ -32,56 +34,20 @@ class PlayerList extends StatelessWidget {
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: player!.cards.length,
+        itemCount: otherPlayers.length,
         itemBuilder: (context, index) {
-          final card = player!.cards[index];
+          // final card = player!.cards[index];
           final isDraggable = turn!.currentPlayer == player;
 
-          return isDraggable 
-          && turn!.draggable!
-              ? Draggable<int>(
-                  // Data is the value this Draggable stores.
-                  data: index,
-                  childWhenDragging: PlayingCard(
-                    card: card,
-                    size: size,
-                    // visible: player!.isHuman,
-                    visible: player!.isHuman && botCard == false ? true : false,
-                    onPlayCard: onPlayCard,
-                    index: index,
-                    turn: turn,
-                    player: player,
-                  ),
-                  feedback: DraggedPlayingCard(
-                    card: card,
-                    size: size,
-                    // visible: player!.isHuman,
-                    visible: player!.isHuman && botCard == false ? true : false,
-                    onPlayCard: onPlayCard,
-                    index: index,
-                    turn: turn,
-                    player: player,
-                  ),
-                  child: PlayingCard(
-                    card: card,
-                    size: size,
-                    // visible: player!.isHuman,
-                    visible: player!.isHuman && botCard == false ? true : false,
-                    onPlayCard: onPlayCard,
-                    index: index,
-                    turn: turn,
-                    player: player,
-                  ),
-                )
-              : PlayerCard(
-                  card: card,
+          return PlayerCard(
+                  // card: card,
                   size: size,
                   // visible: player!.isHuman,
-                  visible: player!.isHuman && botCard == false ? true : false,
+                  visible:  true,
                   onPlayCard: onPlayCard,
                   index: index,
                   turn: turn,
-                  player: player,
+                  player: otherPlayers[index],
                 );
         },
       ),

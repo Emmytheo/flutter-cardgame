@@ -3,6 +3,7 @@ import 'package:cardgame/components/card_list.dart';
 import 'package:cardgame/components/deck_pile.dart';
 import 'package:cardgame/components/discard_pile.dart';
 import 'package:cardgame/components/player_info.dart';
+import 'package:cardgame/components/player_list.dart';
 import 'package:cardgame/models/card_model.dart';
 import 'package:cardgame/models/game_model.dart';
 import 'package:cardgame/models/player_model.dart';
@@ -85,15 +86,16 @@ class _GameBoardState extends State<GameBoard> {
                     ),
                     Align(
                         alignment: Alignment.topCenter,
-                        child: model.whot_turn.currentPlayer !=
-                                model.playerz![0]
+                        child:  
+                                model.playerz!.length > 1
                             ? Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CardList(
+                                  PlayerList(
                                     player: model.whot_turn.currentPlayer,
                                     turn: model.whot_turn,
                                     botCard: true,
+                                    otherPlayers: model.playerz!.where((p) => p.isHuman == false).toList(),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
