@@ -31,7 +31,7 @@ class WhotGameProvider extends GameProvider {
 
   GameModel? currentGame;
 
-  WhotPlayerModel? player;
+  WhotPlayerModel? primaryPlayer;
 
   DeckModel? _currentDeck;
   DeckModel? get currentDeck => _currentDeck;
@@ -68,7 +68,7 @@ class WhotGameProvider extends GameProvider {
       Map<String, dynamic> _message =
           Map<String, dynamic>.from(jsonDecode(message) as Map);
       WhotPlayerModel player = playerz![idx];
-
+      primaryPlayer = playerz![idx];
       switch (_message['message']) {
         case 'game:create':
           print('Creating ${name}');
@@ -81,17 +81,17 @@ class WhotGameProvider extends GameProvider {
           }
           for (int i = 0; i < currentGame!.noOfPlayers!; i++) {
             if (i != idx) {
-              var other_plyer = WhotPlayerModel(
-                name: 'player $i',
-                isHuman: false,
-                channel: channel,
-                id: i,
-                cards: []
-              );
-              playerz!.add(other_plyer);
+              print('index $i : player $idx');
+              var otherPlyer = WhotPlayerModel(
+                  name: 'player $i',
+                  isHuman: false,
+                  channel: channel,
+                  id: i,
+                  cards: []);
+              playerz!.add(otherPlyer);
             }
           }
-          print(playerz);
+          // print(playerz);
           // game.players = [player];
           break;
 
@@ -127,6 +127,18 @@ class WhotGameProvider extends GameProvider {
           print(_message);
           WhotCardModel discardd = WhotCardModel.fromJson(_message['card']);
           whot_turn.discardz = [discardd];
+          break;
+
+        case 'current:player':
+          var activePlayerId = _message['playerId'];
+          for (int i = 0; i < currentGame!.noOfPlayers!; i++) {
+            if (activePlayerId != playerz![i].id) {
+              playerz![i].nowPlaying = false;
+            } else {
+              playerz![i].nowPlaying = true;
+              print('current player: player ${activePlayerId} : player ${playerz![i].id} : playerIndex $i ');
+            }
+          }
           break;
 
         default:

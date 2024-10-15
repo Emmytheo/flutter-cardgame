@@ -86,8 +86,7 @@ class _GameBoardState extends State<GameBoard> {
                     ),
                     Align(
                         alignment: Alignment.topCenter,
-                        child:  
-                                model.playerz!.length > 1
+                        child: model.playerz!.length > 1
                             ? Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -95,31 +94,41 @@ class _GameBoardState extends State<GameBoard> {
                                     player: model.whot_turn.currentPlayer,
                                     turn: model.whot_turn,
                                     botCard: true,
-                                    otherPlayers: model.playerz!.where((p) => p.isHuman == false).toList(),
+                                    otherPlayers: model.playerz!
+                                        .where((p) => p.isHuman == false)
+                                        .toList(),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: (model.whot_turn.currentPlayer !=
-                                            model.playerz![0])
+                                            model.primaryPlayer)
                                         ? Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              ...model.additionalButtons
-                                                  .map((button) => Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 4),
-                                                        child: ElevatedButton(
-                                                            onPressed: button
-                                                                    .enabled
-                                                                ? button
-                                                                    .onPressed
-                                                                : null,
-                                                            child: Text(
-                                                                button.label)),
-                                                      ))
-                                                  .toList(),
+                                              // ...model.additionalButtons
+                                              //     .map((button) => Padding(
+                                              //           padding:
+                                              //               const EdgeInsets
+                                              //                   .only(right: 4),
+                                              //           child: ElevatedButton(
+                                              //               onPressed: button
+                                              //                       .enabled
+                                              //                   ? button
+                                              //                       .onPressed
+                                              //                   : null,
+                                              //               child: Text(
+                                              //                   button.label)),
+                                              //         ))
+                                              //     .toList(),
+                                              // Text(
+                                              //   'Now playing: Player ${model.playerz!.indexWhere((p) => p.nowPlaying == true)}',
+                                              //   style: const TextStyle(
+                                              //     color: Colors.black45,
+                                              //     fontSize: 18.0,
+                                              //     // fontWeight: FontWeight.bold
+                                              //   ),
+                                              // ),
                                               Row(
                                                 children: [
                                                   model.whot_turn.draggable!
@@ -168,7 +177,7 @@ class _GameBoardState extends State<GameBoard> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: (model.whot_turn.currentPlayer ==
-                                    model.playerz![0])
+                                    model.primaryPlayer)
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,

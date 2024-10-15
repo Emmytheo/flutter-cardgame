@@ -68,13 +68,12 @@ class PlayerCard extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.center,
-                  // child: Text("${player?.name}"),
                   child: CircleAvatar(
                     backgroundColor: Colors.greenAccent[400],
-                    radius: 120,
+                    radius: 80,
                     child: CircleAvatar(
                       backgroundColor: Colors.green,
-                      radius: 115,
+                      radius: 70,
                       child: Text(
                         "${player?.id}",
                         style: TextStyle(fontSize: 25, color: Colors.white),
@@ -82,10 +81,10 @@ class PlayerCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Align(
-                //   alignment: Alignment.topLeft,
-                //   child: Text("${card.value}"),
-                // ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("Player"),
+                ),
                 // Align(
                 //   alignment: Alignment.topRight,
                 //   child: Text("${card.value}"),

@@ -8,6 +8,7 @@ class WhotPlayerModel {
   final bool isHuman;
   List<WhotCardModel> cards;
   int score;
+  late bool nowPlaying;
   late WebSocketChannel channel;
   WebSocketChannel get _channel => channel;
 
@@ -17,7 +18,8 @@ class WhotPlayerModel {
     required this.id,
     this.cards = const [],
     this.isHuman = false,
-    this.score = 0, 
+    this.score = 0,
+    this.nowPlaying = false, 
     required this.channel,
   });
 
