@@ -224,8 +224,8 @@ class _GameBoardState extends State<GameBoard> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          const BoxShadow(
+                        boxShadow: const [
+                          BoxShadow(
                             color: Colors.black26,
                             blurRadius: 5,
                             offset: Offset(0, 2),
@@ -309,8 +309,8 @@ class _GameBoardState extends State<GameBoard> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    const BoxShadow(
+                                  boxShadow: const [
+                                    BoxShadow(
                                       color: Colors.black26,
                                       blurRadius: 5,
                                       offset: Offset(0, 2),
@@ -343,8 +343,8 @@ class _GameBoardState extends State<GameBoard> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    const BoxShadow(
+                                  boxShadow: const [
+                                    BoxShadow(
                                       color: Colors.black26,
                                       blurRadius: 5,
                                       offset: Offset(0, 2),
