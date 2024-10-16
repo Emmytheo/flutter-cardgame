@@ -190,11 +190,11 @@ class _GameBoardState extends State<GameBoard> {
             model.gameList?.isNotEmpty &&
             model.currentGame == null) {
           return SingleChildScrollView(
-            physics: ScrollPhysics(),
+            physics: const ScrollPhysics(),
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   // color: Colors.black87,
                   width: double.infinity,
                   child: Padding(
@@ -205,7 +205,7 @@ class _GameBoardState extends State<GameBoard> {
                         children: [
                           Text(
                             'Whot - Available Games (${model.gameList!.length})',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold),
@@ -214,7 +214,7 @@ class _GameBoardState extends State<GameBoard> {
                   ),
                 ),
                 ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: model.gameList!.length,
                   itemBuilder: (context, index) {
@@ -259,7 +259,7 @@ class _GameBoardState extends State<GameBoard> {
           return Column(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 // color: Colors.black87,
                 width: double.infinity,
                 child: Padding(
@@ -270,7 +270,7 @@ class _GameBoardState extends State<GameBoard> {
                       children: [
                         Text(
                           'Whot - Game #(${model.currentGame!.game_id}) Lobby',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold),
@@ -288,14 +288,14 @@ class _GameBoardState extends State<GameBoard> {
                         children: [
                           Text(
                             'Welcome to the Game #${model.currentGame!.game_id} Lobby',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
                             'You and ${model.currentGame!.players! - 1} Players Joined - Waiting for ${model.currentGame!.noOfPlayers! - model.currentGame!.players!} More',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.bold),
