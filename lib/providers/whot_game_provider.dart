@@ -96,7 +96,7 @@ class WhotGameProvider extends GameProvider {
               playerz!.add(otherPlyer);
             }
           }
-          print('Initial playerz ${playerz!.length}');
+          print('Initial playerz ${playerz!.length}'); 
           // game.players = [player];
           break;
 

@@ -33,7 +33,6 @@ class _GameBoardState extends State<GameBoard> {
         if (model.gameStart) {
           return Column(
             children: [
-              PlayerInfo(turn: model.whot_turn),
               Expanded(
                 child: Stack(
                   children: [
@@ -90,6 +89,9 @@ class _GameBoardState extends State<GameBoard> {
                             ? Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  PlayerInfo(
+                                      turn: model.whot_turn,
+                                      players: model.playerz),
                                   PlayerList(
                                     player: model.whot_turn.currentPlayer,
                                     turn: model.whot_turn,
@@ -97,74 +99,6 @@ class _GameBoardState extends State<GameBoard> {
                                     otherPlayers: model.playerz!
                                         .where((p) => p.isHuman == false)
                                         .toList(),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: (model.whot_turn.currentPlayer !=
-                                            model.primaryPlayer)
-                                        ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              // ...model.additionalButtons
-                                              //     .map((button) => Padding(
-                                              //           padding:
-                                              //               const EdgeInsets
-                                              //                   .only(right: 4),
-                                              //           child: ElevatedButton(
-                                              //               onPressed: button
-                                              //                       .enabled
-                                              //                   ? button
-                                              //                       .onPressed
-                                              //                   : null,
-                                              //               child: Text(
-                                              //                   button.label)),
-                                              //         ))
-                                              //     .toList(),
-                                              // Text(
-                                              //   'Now playing: Player ${model.playerz!.indexWhere((p) => p.nowPlaying == true)}',
-                                              //   style: const TextStyle(
-                                              //     color: Colors.black45,
-                                              //     fontSize: 18.0,
-                                              //     // fontWeight: FontWeight.bold
-                                              //   ),
-                                              // ),
-                                              Row(
-                                                children: [
-                                                  model.whot_turn.draggable!
-                                                      ? const Icon(
-                                                          Icons.swipe_left,
-                                                        )
-                                                      : const Icon(
-                                                          Icons.do_not_touch,
-                                                        ),
-                                                  Switch(
-                                                    // thumb color (round icon)
-                                                    activeColor: Colors.cyan,
-                                                    activeTrackColor:
-                                                        Colors.white,
-                                                    inactiveThumbColor: Colors
-                                                        .blueGrey.shade600,
-                                                    inactiveTrackColor:
-                                                        Colors.grey.shade400,
-                                                    splashRadius: 50.0,
-                                                    // boolean variable value
-                                                    value: model
-                                                        .whot_turn.draggable!,
-                                                    // changes the state of the switch
-                                                    onChanged: (bool newValue) {
-                                                      setState(() {
-                                                        model.whot_turn
-                                                                .draggable =
-                                                            newValue;
-                                                      });
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          )
-                                        : Container(),
                                   ),
                                 ],
                               )
