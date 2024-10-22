@@ -29,6 +29,14 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton:
+          Consumer<DraughtsGameProvider>(builder: (context, provider, child) {
+        return FloatingActionButton(
+          onPressed: () =>
+              {provider.createGame(), provider.listAvailableGames()},
+          child: const Icon(Icons.add),
+        );
+      }),
       appBar: AppBar(
         title: const Text('Draughts Menu'),
       ),
@@ -36,14 +44,14 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
         builder: (context, provider, child) {
           return Column(
             children: [
-              SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    {provider.createGame(), provider.listAvailableGames()},
-                child: const Text('Create New Game'),
-              ),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // ElevatedButton(
+              //   onPressed: () =>
+              //       {provider.createGame(), provider.listAvailableGames()},
+              //   child: const Text('Create New Game'),
+              // ),
               SizedBox(
                 height: 10,
               ),

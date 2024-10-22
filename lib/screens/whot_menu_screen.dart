@@ -28,6 +28,13 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton:
+          Consumer<WhotGameProvider>(builder: (context, provider, child) {
+        return FloatingActionButton(
+          onPressed: () => {provider.createNewGame(), provider.listGames()},
+          child: const Icon(Icons.add),
+        );
+      }),
       appBar: AppBar(
         title: const Text('Whot Menu'),
       ),
@@ -35,15 +42,15 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
         builder: (context, provider, child) {
           return Column(
             children: [
-              SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    {provider.createNewGame(), provider.listGames()},
-                child: const Text('Create New Game'),
-              ),
-              SizedBox(
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // ElevatedButton(
+              //   onPressed: () =>
+              //       {provider.createNewGame(), provider.listGames()},
+              //   child: const Text('Create New Game'),
+              // ),
+              const SizedBox(
                 height: 10,
               ),
               Expanded(
@@ -70,16 +77,25 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
                           title: Text('Game #${game.game_id}'),
                           subtitle: Text(
                               '(${game.players} / ${game.noOfPlayers}) Players - ${game.listeners} Listeners'),
-                          trailing: TextButton(
-                            onPressed: () async {
-                              await provider.setCurrentGame(game);
-                              // await model.setupListeners(game);
-                              await provider.setupGame(game);
-                              print(provider.currentGame);
-                              print(provider.gameStart);
-                            },
-                            child: const Text('Start Game'),
-                          )),
+                          trailing: provider.currentGame != null &&
+                                  provider.currentGame!.game_id == game.game_id
+                              ? TextButton(
+                                  onPressed: () async {
+                                    Navigator.pushNamed(context, '/whotGame');
+                                  },
+                                  child: const Text('Resume Game'),
+                                )
+                              : TextButton(
+                                  onPressed: () async {
+                                    await provider.setCurrentGame(game);
+                                    // await model.setupListeners(game);
+                                    await provider.setupGame(game);
+                                    print(provider.currentGame);
+                                    print(provider.gameStart);
+                                    Navigator.pushNamed(context, '/whotGame');
+                                  },
+                                  child: const Text('Start Game'),
+                                )),
                     );
                   },
                 ),
