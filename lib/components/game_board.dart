@@ -33,7 +33,6 @@ class _GameBoardState extends State<GameBoard> {
         if (model.gameStart) {
           return Column(
             children: [
-              PlayerInfo(turn: model.whot_turn),
               Expanded(
                 child: Stack(
                   children: [
@@ -90,6 +89,9 @@ class _GameBoardState extends State<GameBoard> {
                             ? Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  PlayerInfo(
+                                      turn: model.whot_turn,
+                                      players: model.playerz),
                                   PlayerList(
                                     player: model.whot_turn.currentPlayer,
                                     turn: model.whot_turn,
@@ -97,74 +99,6 @@ class _GameBoardState extends State<GameBoard> {
                                     otherPlayers: model.playerz!
                                         .where((p) => p.isHuman == false)
                                         .toList(),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: (model.whot_turn.currentPlayer !=
-                                            model.primaryPlayer)
-                                        ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              // ...model.additionalButtons
-                                              //     .map((button) => Padding(
-                                              //           padding:
-                                              //               const EdgeInsets
-                                              //                   .only(right: 4),
-                                              //           child: ElevatedButton(
-                                              //               onPressed: button
-                                              //                       .enabled
-                                              //                   ? button
-                                              //                       .onPressed
-                                              //                   : null,
-                                              //               child: Text(
-                                              //                   button.label)),
-                                              //         ))
-                                              //     .toList(),
-                                              // Text(
-                                              //   'Now playing: Player ${model.playerz!.indexWhere((p) => p.nowPlaying == true)}',
-                                              //   style: const TextStyle(
-                                              //     color: Colors.black45,
-                                              //     fontSize: 18.0,
-                                              //     // fontWeight: FontWeight.bold
-                                              //   ),
-                                              // ),
-                                              Row(
-                                                children: [
-                                                  model.whot_turn.draggable!
-                                                      ? const Icon(
-                                                          Icons.swipe_left,
-                                                        )
-                                                      : const Icon(
-                                                          Icons.do_not_touch,
-                                                        ),
-                                                  Switch(
-                                                    // thumb color (round icon)
-                                                    activeColor: Colors.cyan,
-                                                    activeTrackColor:
-                                                        Colors.white,
-                                                    inactiveThumbColor: Colors
-                                                        .blueGrey.shade600,
-                                                    inactiveTrackColor:
-                                                        Colors.grey.shade400,
-                                                    splashRadius: 50.0,
-                                                    // boolean variable value
-                                                    value: model
-                                                        .whot_turn.draggable!,
-                                                    // changes the state of the switch
-                                                    onChanged: (bool newValue) {
-                                                      setState(() {
-                                                        model.whot_turn
-                                                                .draggable =
-                                                            newValue;
-                                                      });
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          )
-                                        : Container(),
                                   ),
                                 ],
                               )
@@ -256,11 +190,11 @@ class _GameBoardState extends State<GameBoard> {
             model.gameList?.isNotEmpty &&
             model.currentGame == null) {
           return SingleChildScrollView(
-            physics: ScrollPhysics(),
+            physics: const ScrollPhysics(),
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   // color: Colors.black87,
                   width: double.infinity,
                   child: Padding(
@@ -271,7 +205,7 @@ class _GameBoardState extends State<GameBoard> {
                         children: [
                           Text(
                             'Whot - Available Games (${model.gameList!.length})',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold),
@@ -280,7 +214,7 @@ class _GameBoardState extends State<GameBoard> {
                   ),
                 ),
                 ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: model.gameList!.length,
                   itemBuilder: (context, index) {
@@ -290,8 +224,8 @@ class _GameBoardState extends State<GameBoard> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          const BoxShadow(
+                        boxShadow: const [
+                          BoxShadow(
                             color: Colors.black26,
                             blurRadius: 5,
                             offset: Offset(0, 2),
@@ -325,7 +259,7 @@ class _GameBoardState extends State<GameBoard> {
           return Column(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 // color: Colors.black87,
                 width: double.infinity,
                 child: Padding(
@@ -336,7 +270,7 @@ class _GameBoardState extends State<GameBoard> {
                       children: [
                         Text(
                           'Whot - Game #(${model.currentGame!.game_id}) Lobby',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold),
@@ -354,14 +288,14 @@ class _GameBoardState extends State<GameBoard> {
                         children: [
                           Text(
                             'Welcome to the Game #${model.currentGame!.game_id} Lobby',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
                             'You and ${model.currentGame!.players! - 1} Players Joined - Waiting for ${model.currentGame!.noOfPlayers! - model.currentGame!.players!} More',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.bold),
@@ -375,8 +309,8 @@ class _GameBoardState extends State<GameBoard> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    const BoxShadow(
+                                  boxShadow: const [
+                                    BoxShadow(
                                       color: Colors.black26,
                                       blurRadius: 5,
                                       offset: Offset(0, 2),
@@ -409,8 +343,8 @@ class _GameBoardState extends State<GameBoard> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    const BoxShadow(
+                                  boxShadow: const [
+                                    BoxShadow(
                                       color: Colors.black26,
                                       blurRadius: 5,
                                       offset: Offset(0, 2),

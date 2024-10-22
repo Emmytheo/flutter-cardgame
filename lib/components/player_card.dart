@@ -38,7 +38,7 @@ class PlayerCard extends StatelessWidget {
       // },
       child: Container(
           width: CARD_WIDTH * size,
-          height: CARD_WIDTH * size,
+          height: CARD_HEIGHT * size,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4.0),
             boxShadow: [
@@ -46,7 +46,7 @@ class PlayerCard extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
                 spreadRadius: 3,
                 blurRadius: 5,
-                offset: Offset(0, 3), // changes position of shadow
+                offset: const Offset(0, 3), // changes position of shadow
               ),
             ],
             border: Border.all(
@@ -69,20 +69,16 @@ class PlayerCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.center,
                   child: CircleAvatar(
-                    backgroundColor: Colors.greenAccent[400],
-                    radius: 80,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.green,
-                      radius: 70,
-                      child: Text(
-                        "${player?.id}",
-                        style: TextStyle(fontSize: 25, color: Colors.white),
-                      ), //Text
-                    ),
+                    backgroundColor: Colors.green,
+                    maxRadius: 70,
+                    child: Text(
+                      "${player?.id}",
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
+                    ), //Text
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topLeft,
+                const Align(
+                  alignment: Alignment.topCenter,
                   child: Text("Player"),
                 ),
                 // Align(
@@ -91,7 +87,7 @@ class PlayerCard extends StatelessWidget {
                 // ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Text("${player?.id}"),
+                  child: Text("Cards"),
                 ),
                 Align(
                   alignment: Alignment.bottomRight,

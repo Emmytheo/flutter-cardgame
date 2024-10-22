@@ -79,19 +79,24 @@ class WhotGameProvider extends GameProvider {
             currentGame!.players = _message['players'];
             currentGame!.listeners = _message['listeners'];
           }
+          var oPlyrIds = [];
+          for (int i = 1; i <= currentGame!.noOfPlayers!; i++) {
+            if (i != player.id) {
+              oPlyrIds.add(i);
+            }
+          }
           for (int i = 0; i < currentGame!.noOfPlayers!; i++) {
             if (i != idx) {
-              print('index $i : player $idx');
               var otherPlyer = WhotPlayerModel(
                   name: 'player $i',
                   isHuman: false,
                   channel: channel,
-                  id: i,
+                  id: oPlyrIds[i - 1],
                   cards: []);
               playerz!.add(otherPlyer);
             }
           }
-          // print(playerz);
+          print('Initial playerz ${playerz!.length}'); 
           // game.players = [player];
           break;
 
@@ -131,14 +136,16 @@ class WhotGameProvider extends GameProvider {
 
         case 'current:player':
           var activePlayerId = _message['playerId'];
-          for (int i = 0; i < currentGame!.noOfPlayers!; i++) {
-            if (activePlayerId != playerz![i].id) {
-              playerz![i].nowPlaying = false;
-            } else {
-              playerz![i].nowPlaying = true;
-              print('current player: player ${activePlayerId} : player ${playerz![i].id} : playerIndex $i ');
+          if (playerz!.length > 1) {
+            for (int i = 0; i < currentGame!.noOfPlayers!; i++) {
+              if (activePlayerId != playerz![i].id) {
+                playerz![i].nowPlaying = false;
+              } else {
+                playerz![i].nowPlaying = true;
+              }
             }
           }
+
           break;
 
         default:
