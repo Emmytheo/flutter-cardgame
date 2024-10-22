@@ -1,28 +1,27 @@
+import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cardgame/providers/draughts_game_provider.dart';
 
-class DraughtsMenuScreen extends StatefulWidget {
-  const DraughtsMenuScreen({Key? key}) : super(key: key);
+class WhotMenuScreen extends StatefulWidget {
+  const WhotMenuScreen({Key? key}) : super(key: key);
 
   @override
-  _DraughtsMenuScreenState createState() => _DraughtsMenuScreenState();
+  _WhotMenuScreenState createState() => _WhotMenuScreenState();
 }
 
-class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
+class _WhotMenuScreenState extends State<WhotMenuScreen> {
   @override
   void initState() {
     super.initState();
 
-    final draughtsProvider =
-        Provider.of<DraughtsGameProvider>(context, listen: false);
+    final whotProvider = Provider.of<WhotGameProvider>(context, listen: false);
 
     // Connect to the WebSocket server here when the menu screen loads
-    draughtsProvider.connectToServer("ws://localhost:8080");
+    // whotProvider.connectToServer("ws://localhost:8080");
 
     // Request the list of available games
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      draughtsProvider.listAvailableGames();
+      whotProvider.listGames();
     });
   }
 
@@ -30,9 +29,9 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Draughts Menu'),
+        title: const Text('Whot Menu'),
       ),
-      body: Consumer<DraughtsGameProvider>(
+      body: Consumer<WhotGameProvider>(
         builder: (context, provider, child) {
           return Column(
             children: [
@@ -41,7 +40,7 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
               ),
               ElevatedButton(
                 onPressed: () =>
-                    {provider.createGame(), provider.listAvailableGames()},
+                    {provider.createNewGame(), provider.listGames()},
                 child: const Text('Create New Game'),
               ),
               SizedBox(
@@ -49,9 +48,9 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: provider.availableGames.length,
+                  itemCount: provider.gameList!.length,
                   itemBuilder: (context, index) {
-                    final game = provider.availableGames[index];
+                    final game = provider.gameList![index];
                     return Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
@@ -67,14 +66,20 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
                         ],
                       ),
                       child: ListTile(
-                        title: Text(
-                            'Game ID: ${game['gameId'].toString().split('-')[0]}-*****-${game['gameId'].toString().split('-')[game['gameId'].toString().split('-').length - 1]}'),
-                        subtitle: Text('Game Type: ${game['gameType']}'),
-                        onTap: () {
-                          provider.joinGame(game['gameId']);
-                          Navigator.pushNamed(context, '/draughtsGame');
-                        },
-                      ),
+                          // tileColor: const Color(0xffc16c34),
+                          title: Text('Game #${game.game_id}'),
+                          subtitle: Text(
+                              '(${game.players} / ${game.noOfPlayers}) Players - ${game.listeners} Listeners'),
+                          trailing: TextButton(
+                            onPressed: () async {
+                              await provider.setCurrentGame(game);
+                              // await model.setupListeners(game);
+                              await provider.setupGame(game);
+                              print(provider.currentGame);
+                              print(provider.gameStart);
+                            },
+                            child: const Text('Start Game'),
+                          )),
                     );
                   },
                 ),

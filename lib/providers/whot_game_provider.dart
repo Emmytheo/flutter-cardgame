@@ -27,7 +27,7 @@ class WhotGameProvider extends GameProvider {
 
   final String junk = "Booyahhhh";
 
-  GamesModel? gameList;
+  GamesModel? gameList = GamesModel.fromJson([]);
 
   GameModel? currentGame;
 

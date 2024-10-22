@@ -3,6 +3,7 @@ import 'package:cardgame/providers/thirty_one_game_provider.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:cardgame/providers/draughts_game_provider.dart';
 import 'package:cardgame/screens/game_screen.dart';
+import 'package:cardgame/screens/whot_menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,6 +54,8 @@ class MyApp extends StatelessWidget {
         '/draughtsGame': (context) =>
             const DraughtsGameScreen(), // Route to DraughtsGameScreen
         '/whotMenu': (context) =>
+            const WhotMenuScreen(), // Route to DraughtsMenuScreen
+        '/whotGame': (context) =>
             const GameScreen(), // Route to DraughtsMenuScreen
       },
     );
