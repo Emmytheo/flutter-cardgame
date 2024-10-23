@@ -2,6 +2,7 @@ import 'package:cardgame/components/card_list.dart';
 import 'package:cardgame/components/discard_pile.dart';
 import 'package:cardgame/components/player_info.dart';
 import 'package:cardgame/components/player_list.dart';
+import 'package:cardgame/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
@@ -34,206 +35,212 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
     //   }
     // });
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Whot Game'),
-      ),
-      body: Consumer<WhotGameProvider>(
-        builder: (context, provider, child) {
-          if (!provider.gameStart) {
-            return const Center(
-              child: Text('Waiting for the game to start...'),
-            );
-          } else if (provider.gameStart) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              // if (!provider.isMenInitialized) {
-              //   provider.initMen(); // Initialize men pieces after the build.
-              // }
-            });
-          }
-
-          return Column(
-            children: [
-              // Text(
-              //   provider.whot_turn.currentPlayer == provider.primaryPlayer
-              //       ? "It's your turn"
-              //       : "Waiting for opponent...",
-              //   style:
-              //       const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              // ),
-              // const SizedBox(height: 10),
-              Expanded(
-                child: Center(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // GestureDetector(
-                                      //   onTap: () async {
-                                      //     await model
-                                      //         .drawCards(model.turn.currentPlayer);
-                                      //   },
-                                      //   child: DeckPile(
-                                      //     remaining: model.currentDeck!.remaining,
-                                      //   ),
-                                      // ),
-                                      // const SizedBox(width: 8),
-                                      DragTarget<int>(
-                                        builder: (
-                                          BuildContext context,
-                                          List<dynamic> accepted,
-                                          List<dynamic> rejected,
-                                        ) {
-                                          return DiscardPile(
-                                            cards: provider.whot_turn.discardz,
-                                            // onPressed: (card) {
-                                            //   model.drawCardsFromDiscard(
-                                            //       model.turn.currentPlayer);
-                                            // },
-                                          );
-                                        },
-                                        onAcceptWithDetails:
-                                            (DragTargetDetails<int> details) {
-                                          setState(() {
-                                            provider.whot_turn
-                                                .playCard(details.data);
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  if (provider.bottomWidget != null &&
-                                      provider.showBottomWidget)
-                                    provider.bottomWidget!
-                                ],
+    return Container(
+      decoration: chachaBackground(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Whot Game',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: chachaAppBarColor(),
+        ),
+        body: Consumer<WhotGameProvider>(
+          builder: (context, provider, child) {
+            if (!provider.gameStart) {
+              return const Center(
+                child: Text('Waiting for the game to start...'),
+              );
+            } else if (provider.gameStart) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                // if (!provider.isMenInitialized) {
+                //   provider.initMen(); // Initialize men pieces after the build.
+                // }
+              });
+            }
+      
+            return Column(
+              children: [
+                // Text(
+                //   provider.whot_turn.currentPlayer == provider.primaryPlayer
+                //       ? "It's your turn"
+                //       : "Waiting for opponent...",
+                //   style:
+                //       const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                // ),
+                // const SizedBox(height: 10),
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // GestureDetector(
+                                        //   onTap: () async {
+                                        //     await model
+                                        //         .drawCards(model.turn.currentPlayer);
+                                        //   },
+                                        //   child: DeckPile(
+                                        //     remaining: model.currentDeck!.remaining,
+                                        //   ),
+                                        // ),
+                                        // const SizedBox(width: 8),
+                                        DragTarget<int>(
+                                          builder: (
+                                            BuildContext context,
+                                            List<dynamic> accepted,
+                                            List<dynamic> rejected,
+                                          ) {
+                                            return DiscardPile(
+                                              cards: provider.whot_turn.discardz,
+                                              // onPressed: (card) {
+                                              //   model.drawCardsFromDiscard(
+                                              //       model.turn.currentPlayer);
+                                              // },
+                                            );
+                                          },
+                                          onAcceptWithDetails:
+                                              (DragTargetDetails<int> details) {
+                                            setState(() {
+                                              provider.whot_turn
+                                                  .playCard(details.data);
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    if (provider.bottomWidget != null &&
+                                        provider.showBottomWidget)
+                                      provider.bottomWidget!
+                                  ],
+                                ),
                               ),
-                            ),
-                            Align(
-                                alignment: Alignment.topCenter,
-                                child: provider.playerz!.length > 1
-                                    ? Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          PlayerInfo(
+                              Align(
+                                  alignment: Alignment.topCenter,
+                                  child: provider.playerz!.length > 1
+                                      ? Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            PlayerInfo(
+                                                turn: provider.whot_turn,
+                                                players: provider.playerz),
+                                            PlayerList(
+                                              player: provider
+                                                  .whot_turn.currentPlayer,
                                               turn: provider.whot_turn,
-                                              players: provider.playerz),
-                                          PlayerList(
-                                            player: provider
-                                                .whot_turn.currentPlayer,
-                                            turn: provider.whot_turn,
-                                            botCard: true,
-                                            otherPlayers: provider.playerz!
-                                                .where(
-                                                    (p) => p.isHuman == false)
-                                                .toList(),
-                                          ),
-                                        ],
-                                      )
-                                    : Container()),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: (provider.whot_turn.currentPlayer ==
-                                            provider.primaryPlayer)
-                                        ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              ...provider.additionalButtons
-                                                  .map((button) => Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 4),
-                                                        child: ElevatedButton(
-                                                            onPressed: button
-                                                                    .enabled
-                                                                ? button
-                                                                    .onPressed
-                                                                : null,
-                                                            child: Text(
-                                                                button.label)),
-                                                      ))
+                                              botCard: true,
+                                              otherPlayers: provider.playerz!
+                                                  .where(
+                                                      (p) => p.isHuman == false)
                                                   .toList(),
-
-                                              Row(
-                                                children: [
-                                                  provider.whot_turn.draggable!
-                                                      ? const Icon(
-                                                          Icons.swipe_left,
-                                                        )
-                                                      : const Icon(
-                                                          Icons.do_not_touch,
-                                                        ),
-                                                  Switch(
-                                                    // thumb color (round icon)
-                                                    activeColor: Colors.cyan,
-                                                    activeTrackColor:
-                                                        Colors.white,
-                                                    inactiveThumbColor: Colors
-                                                        .blueGrey.shade600,
-                                                    inactiveTrackColor:
-                                                        Colors.grey.shade400,
-                                                    splashRadius: 50.0,
-                                                    // boolean variable value
-                                                    value: provider
-                                                        .whot_turn.draggable!,
-                                                    // changes the state of the switch
-                                                    onChanged: (bool newValue) {
-                                                      setState(() {
-                                                        provider.whot_turn
-                                                                .draggable =
-                                                            newValue;
-                                                      });
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                              // const ElevatedButton(
-                                              //     onPressed: null,
-                                              //     // onPressed: provider.canEndTurn
-                                              //     //     ? () {
-                                              //     //         provider.endTurn();
-                                              //     //       }
-                                              //     //     : null,
-                                              //     child: Text("Your Turn"))
-                                            ],
-                                          )
-                                        : Container(),
-                                  ),
-                                  CardList(
-                                      player: provider.playerz![0],
-                                      turn: provider.whot_turn
-                                      // onPlayCard: (CardModel card) {
-                                      //   model.playCard(
-                                      //       player: model.players[0], card: card);
-                                      // },
-                                      ),
-                                ],
-                              ),
-                            )
-                          ],
+                                            ),
+                                          ],
+                                        )
+                                      : Container()),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: (provider.whot_turn.currentPlayer ==
+                                              provider.primaryPlayer)
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                ...provider.additionalButtons
+                                                    .map((button) => Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(right: 4),
+                                                          child: ElevatedButton(
+                                                              onPressed: button
+                                                                      .enabled
+                                                                  ? button
+                                                                      .onPressed
+                                                                  : null,
+                                                              child: Text(
+                                                                  button.label)),
+                                                        ))
+                                                    .toList(),
+      
+                                                Row(
+                                                  children: [
+                                                    provider.whot_turn.draggable!
+                                                        ? const Icon(
+                                                            Icons.swipe_left,
+                                                          )
+                                                        : const Icon(
+                                                            Icons.do_not_touch,
+                                                          ),
+                                                    Switch(
+                                                      // thumb color (round icon)
+                                                      activeColor: Colors.cyan,
+                                                      activeTrackColor:
+                                                          Colors.white,
+                                                      inactiveThumbColor: Colors
+                                                          .blueGrey.shade600,
+                                                      inactiveTrackColor:
+                                                          Colors.grey.shade400,
+                                                      splashRadius: 50.0,
+                                                      // boolean variable value
+                                                      value: provider
+                                                          .whot_turn.draggable!,
+                                                      // changes the state of the switch
+                                                      onChanged: (bool newValue) {
+                                                        setState(() {
+                                                          provider.whot_turn
+                                                                  .draggable =
+                                                              newValue;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                                // const ElevatedButton(
+                                                //     onPressed: null,
+                                                //     // onPressed: provider.canEndTurn
+                                                //     //     ? () {
+                                                //     //         provider.endTurn();
+                                                //     //       }
+                                                //     //     : null,
+                                                //     child: Text("Your Turn"))
+                                              ],
+                                            )
+                                          : Container(),
+                                    ),
+                                    CardList(
+                                        player: provider.playerz![0],
+                                        turn: provider.whot_turn
+                                        // onPlayCard: (CardModel card) {
+                                        //   model.playCard(
+                                        //       player: model.players[0], card: card);
+                                        // },
+                                        ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

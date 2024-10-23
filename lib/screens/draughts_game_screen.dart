@@ -1,3 +1,4 @@
+import 'package:cardgame/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cardgame/providers/draughts_game_provider.dart';
@@ -25,59 +26,65 @@ class DraughtsGameScreen extends StatelessWidget {
     //   }
     // });
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Draughts Game'),
-      ),
-      body: Consumer<DraughtsGameProvider>(
-        builder: (context, provider, child) {
-          if (!provider.isGameStarted) {
-            return const Center(
-              child: Text('Waiting for the game to start...'),
+    return Container(
+      decoration: chachaBackground(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Draughts Game',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: chachaAppBarColor(),
+        ),
+        body: Consumer<DraughtsGameProvider>(
+          builder: (context, provider, child) {
+            if (!provider.isGameStarted) {
+              return const Center(
+                child: Text('Waiting for the game to start...'),
+              );
+            } else if (provider.isGameStarted) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!provider.isMenInitialized) {
+                  provider.initMen(); // Initialize men pieces after the build.
+                }
+              });
+            }
+      
+            return Column(
+              children: [
+                Text(
+                  provider.yourTurn
+                      ? "It's your turn"
+                      : "Waiting for opponent...",
+                  style:
+                      const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Center(
+                    child: buildGameTable(context, provider),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(color: colorAppBar, boxShadow: const [
+                    BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 3),
+                        blurRadius: 12)
+                  ]),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      buildCurrentPlayerTurn(
+                        context,
+                        provider,
+                      )
+                    ],
+                  ),
+                ),
+              ],
             );
-          } else if (provider.isGameStarted) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!provider.isMenInitialized) {
-                provider.initMen(); // Initialize men pieces after the build.
-              }
-            });
-          }
-
-          return Column(
-            children: [
-              Text(
-                provider.yourTurn
-                    ? "It's your turn"
-                    : "Waiting for opponent...",
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Center(
-                  child: buildGameTable(context, provider),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(color: colorAppBar, boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0, 3),
-                      blurRadius: 12)
-                ]),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    buildCurrentPlayerTurn(
-                      context,
-                      provider,
-                    )
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
+          },
+        ),
       ),
     );
   }
