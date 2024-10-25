@@ -2,6 +2,7 @@ import 'package:cardgame/constants.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WhotMenuScreen extends StatefulWidget {
   const WhotMenuScreen({Key? key}) : super(key: key);
@@ -39,15 +40,16 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
           );
         }),
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             'Whot Menu',
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.inter(color: Colors.white),
           ),
           backgroundColor: chachaAppBarColor(),
           actions: [
             Consumer<WhotGameProvider>(builder: (context, provider, child) {
               return IconButton(
-                icon: const Icon(Icons.replay_outlined),
+                icon: const Icon(Icons.replay_outlined, color: Colors.white,
+                ),
                 onPressed: () => {provider.listGames()},
               );
             })
@@ -78,7 +80,7 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
                                 margin: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
-                                  color: chachaLightColor(),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                   boxShadow: const [
                                     BoxShadow(
@@ -119,9 +121,11 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
                               );
                             },
                           )
-                        : const Center(
+                        : Center(
                             child: Text(
-                                'No Available Games, Use + icon to create one'),
+                              'No Available Games, Use + icon to create one',
+                              style: GoogleFonts.inter(color: Colors.white),
+                            ),
                           )),
               ],
             );

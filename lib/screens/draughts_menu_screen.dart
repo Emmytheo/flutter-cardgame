@@ -2,6 +2,7 @@ import 'package:cardgame/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cardgame/providers/draughts_game_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DraughtsMenuScreen extends StatefulWidget {
   const DraughtsMenuScreen({Key? key}) : super(key: key);
@@ -41,15 +42,16 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
           );
         }),
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             'Draughts Menu',
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.inter(color: Colors.white),
           ),
           backgroundColor: chachaAppBarColor(),
           actions: [
             Consumer<DraughtsGameProvider>(builder: (context, provider, child) {
               return IconButton(
-                icon: const Icon(Icons.replay_outlined),
+                icon: const Icon(Icons.replay_outlined, color: Colors.white,
+                ),
                 onPressed: () => {provider.listAvailableGames()},
               );
             })
@@ -80,7 +82,7 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
                                 margin: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
-                                  color: chachaLightColor(),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                   boxShadow: const [
                                     BoxShadow(
@@ -121,9 +123,11 @@ class _DraughtsMenuScreenState extends State<DraughtsMenuScreen> {
                               );
                             },
                           )
-                        : const Center(
+                        : Center(
                             child: Text(
-                                'No Available Games, Use + icon to create one'),
+                              'No Available Games, Use + icon to create one',
+                              style: GoogleFonts.inter(color: Colors.white),
+                            ),
                           )),
               ],
             );

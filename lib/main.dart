@@ -1,3 +1,4 @@
+import 'package:cardgame/constants.dart';
 import 'package:cardgame/providers/crazy_eights_game_provider.dart';
 import 'package:cardgame/providers/thirty_one_game_provider.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
@@ -6,6 +7,7 @@ import 'package:cardgame/screens/whot_game_screen.dart';
 import 'package:cardgame/screens/whot_menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // Screens
 import 'package:cardgame/screens/game_list_screen.dart';
@@ -42,9 +44,12 @@ class MyApp extends StatelessWidget {
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'inter',
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(backgroundColor: Color(0xff9a6851)),
+        appBarTheme: AppBarTheme(
+            backgroundColor: chachaAppBarColor(),
+            iconTheme: IconThemeData(color: Colors.white)),
       ),
       initialRoute: '/',
       routes: {

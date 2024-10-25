@@ -9,6 +9,7 @@ import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:cardgame/models/coordinate.dart';
 import 'package:cardgame/models/block_table.dart';
 import 'package:cardgame/models/men.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WhotGameScreen extends StatefulWidget {
   const WhotGameScreen({Key? key}) : super(key: key);
@@ -39,16 +40,17 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
       decoration: chachaBackground(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Whot Game',
-            style: TextStyle(color: Colors.white),
+          title: Text(
+            'Whot Game',
+            style: GoogleFonts.inter(color: Colors.white),
           ),
           backgroundColor: chachaAppBarColor(),
         ),
         body: Consumer<WhotGameProvider>(
           builder: (context, provider, child) {
             if (!provider.gameStart) {
-              return const Center(
-                child: Text('Waiting for the game to start...'),
+              return Center(
+                child: Text('Waiting for the game to start...', style: GoogleFonts.inter(color: Colors.white),),
               );
             } else if (provider.gameStart) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -57,7 +59,7 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
                 // }
               });
             }
-      
+
             return Column(
               children: [
                 // Text(
@@ -65,7 +67,7 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
                 //       ? "It's your turn"
                 //       : "Waiting for opponent...",
                 //   style:
-                //       const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                //       const GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold),
                 // ),
                 // const SizedBox(height: 10),
                 Expanded(
@@ -100,7 +102,8 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
                                             List<dynamic> rejected,
                                           ) {
                                             return DiscardPile(
-                                              cards: provider.whot_turn.discardz,
+                                              cards:
+                                                  provider.whot_turn.discardz,
                                               // onPressed: (card) {
                                               //   model.drawCardsFromDiscard(
                                               //       model.turn.currentPlayer);
@@ -152,31 +155,35 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: (provider.whot_turn.currentPlayer ==
+                                      child: (provider
+                                                  .whot_turn.currentPlayer ==
                                               provider.primaryPlayer)
                                           ? Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 ...provider.additionalButtons
                                                     .map((button) => Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .only(right: 4),
+                                                                  .only(
+                                                                  right: 4),
                                                           child: ElevatedButton(
                                                               onPressed: button
                                                                       .enabled
                                                                   ? button
                                                                       .onPressed
                                                                   : null,
-                                                              child: Text(
-                                                                  button.label)),
+                                                              child: Text(button
+                                                                  .label)),
                                                         ))
                                                     .toList(),
-      
+
                                                 Row(
                                                   children: [
-                                                    provider.whot_turn.draggable!
+                                                    provider.whot_turn
+                                                            .draggable!
                                                         ? const Icon(
                                                             Icons.swipe_left,
                                                           )
@@ -197,7 +204,8 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
                                                       value: provider
                                                           .whot_turn.draggable!,
                                                       // changes the state of the switch
-                                                      onChanged: (bool newValue) {
+                                                      onChanged:
+                                                          (bool newValue) {
                                                         setState(() {
                                                           provider.whot_turn
                                                                   .draggable =
