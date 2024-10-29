@@ -14,6 +14,12 @@ Color chachaLightColor() => const Color.fromRGBO(246, 198, 237, 1);
 
 Color chachaDarkColor() => const Color.fromRGBO(45, 0, 42, 0.52);
 
+Color chachaVeryLightColor() => const Color.fromRGBO(246, 198, 237, 0.32);
+
+
+
+
+
 const List<dynamic> Games = [
   {
     'name': "whot",

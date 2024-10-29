@@ -78,19 +78,19 @@ class WhotCardModel {
   static String shapeToImage(Shape shape) {
     switch (shape) {
       case Shape.Square:
-        return "assets/images/card-square.svg";
+        return "images/cardSquare.png";
       case Shape.Star:
-        return "assets/images/card-star.svg";
+        return "images/cardStar.png";
       case Shape.Circle:
-        return "assets/images/card-circle.svg";
+        return "images/cardCircle.png";
       case Shape.Triangle:
-        return "assets/images/card-triangle.svg";
+        return "images/cardTriangle.png";
       case Shape.Cross:
-        return "assets/images/card-cross.svg";
+        return "images/cardCross.png";
       case Shape.Whot:
-        return "assets/images/small/card-whot.svg";
+        return "images/small/card-whot.svg";
       case Shape.Other:
-        return "assets/images/card-other.svg";
+        return "images/card-other-new.png";
     }
   }
 

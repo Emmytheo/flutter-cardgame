@@ -1,6 +1,8 @@
+import 'package:cardgame/constants.dart';
 import 'package:cardgame/models/game_model.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class CreateWhotGameModal extends StatefulWidget {
@@ -39,7 +41,6 @@ class _CreateGameModalState extends State<CreateWhotGameModal> {
     });
 
     try {
-      
       final game = await _gameProvider.newWhotGame(maxPlayers);
       final response = [game.toJson()];
 
@@ -66,14 +67,30 @@ class _CreateGameModalState extends State<CreateWhotGameModal> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Create New Game'),
+      backgroundColor: chachaAppBarColor(),
+      title: Text(
+        'Create New Game',
+        style: GoogleFonts.inter(
+            fontWeight: FontWeight.normal,
+            // fontSize: 18,
+
+            // height: 0.95,
+            color: Colors.white),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: _maxPlayersController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Max Players',
+              labelStyle: GoogleFonts.inter(
+                  fontWeight: FontWeight.normal,
+                  // fontSize: 18,
+
+                  // height: 0.95,
+                  color: Colors.white),
+              hoverColor: Colors.white,
               // keyboardType: TextInputType.number,
             ),
           ),
@@ -82,15 +99,34 @@ class _CreateGameModalState extends State<CreateWhotGameModal> {
       actions: [
         TextButton(
           onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: GoogleFonts.inter(
+                fontWeight: FontWeight.normal,
+                // fontSize: 18,
+
+                // height: 0.95,
+                color: Colors.white),
+          ),
         ),
         ElevatedButton(
           onPressed: _isLoading ? null : _createGame,
-          child: _isLoading ? CircularProgressIndicator() : Text('Create'),
+          child: _isLoading
+              ? CircularProgressIndicator()
+              : Text(
+                  'Create',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.normal,
+                    // fontSize: 18,
+
+                    // height: 0.95,
+                    // color: Colors.white
+                  ),
+                ),
         ),
       ],
     );
   }
-  
+
   httpPost(String s, {required Map<String, Object> body}) {}
 }

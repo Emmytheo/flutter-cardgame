@@ -68,23 +68,78 @@ class PlayingCard extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.center,
-                  child: Text("${card.shape}"),
+                  child: card.shape == 'Whot'
+                      ? Text(card.shape)
+                      : Image.asset(
+                          card.image,
+                          width: 80,
+                        ),
                 ),
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Text("${card.value}"),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("${card.value}"),
+                      card.shape == 'Whot'
+                          ? const SizedBox(
+                              height: 2,
+                            )
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            )
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.topRight,
-                  child: Text("${card.value}"),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("${card.value}"),
+                      card.shape == 'Whot'
+                          ? const SizedBox(height: 2,)
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            )
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Text("${card.value}"),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      card.shape == 'Whot'
+                          ? const SizedBox(
+                              height: 2,
+                            )
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            ),
+                      Text("${card.value}"),
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: Text("${card.value}"),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      card.shape == 'Whot'
+                          ? const SizedBox(
+                              height: 2,
+                            )
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            ),
+                      Text("${card.value}"),
+                    ],
+                  ),
                 ),
               ],
             ),

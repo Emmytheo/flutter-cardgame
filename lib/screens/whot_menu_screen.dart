@@ -1,4 +1,5 @@
 import 'package:cardgame/constants.dart';
+import 'package:cardgame/models/game_model.dart';
 import 'package:cardgame/providers/whot_game_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,109 +30,204 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: chachaBackground(),
-      child: Scaffold(
-        floatingActionButton:
-            Consumer<WhotGameProvider>(builder: (context, provider, child) {
-          return FloatingActionButton(
-            onPressed: () => {provider.createNewGame(), provider.listGames()},
-            child: const Icon(Icons.add),
-          );
-        }),
-        appBar: AppBar(
-          title: Text(
-            'Whot Menu',
-            style: GoogleFonts.inter(color: Colors.white),
-          ),
-          backgroundColor: chachaAppBarColor(),
-          actions: [
-            Consumer<WhotGameProvider>(builder: (context, provider, child) {
-              return IconButton(
-                icon: const Icon(Icons.replay_outlined, color: Colors.white,
-                ),
-                onPressed: () => {provider.listGames()},
+    return DefaultTabController(
+      length: 3,
+      child: Container(
+        decoration: chachaBackground(),
+        child: Scaffold(
+            floatingActionButton:
+                Consumer<WhotGameProvider>(builder: (context, provider, child) {
+              return FloatingActionButton(
+                onPressed: () =>
+                    {provider.createNewGame(), provider.listGames()},
+                child: const Icon(Icons.add),
               );
-            })
-          ],
-        ),
-        body: Consumer<WhotGameProvider>(
-          builder: (context, provider, child) {
-            return Column(
-              children: [
-                // SizedBox(
-                //   height: 10,
-                // ),
-                // ElevatedButton(
-                //   onPressed: () =>
-                //       {provider.createNewGame(), provider.listGames()},
-                //   child: const Text('Create New Game'),
-                // ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                    child: provider.gameList!.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: provider.gameList!.length,
-                            itemBuilder: (context, index) {
-                              final game = provider.gameList![index];
-                              return Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 5,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: ListTile(
-                                    // tileColor: const Color(0xffc16c34),
-                                    title: Text('Game #${game.game_id}'),
-                                    subtitle: Text(
-                                        '(${game.players} / ${game.noOfPlayers}) Players - ${game.listeners} Listeners'),
-                                    trailing: provider.currentGame != null &&
-                                            provider.currentGame!.game_id ==
-                                                game.game_id
-                                        ? TextButton(
-                                            onPressed: () async {
-                                              Navigator.pushNamed(
-                                                  context, '/whotGame');
-                                            },
-                                            child: const Text('Resume Game'),
-                                          )
-                                        : TextButton(
-                                            onPressed: () async {
-                                              await provider
-                                                  .setCurrentGame(game);
-                                              // await model.setupListeners(game);
-                                              await provider.setupGame(game);
-                                              print(provider.currentGame);
-                                              print(provider.gameStart);
-                                              Navigator.pushNamed(
-                                                  context, '/whotGame');
-                                            },
-                                            child: const Text('Start Game'),
-                                          )),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              'No Available Games, Use + icon to create one',
-                              style: GoogleFonts.inter(color: Colors.white),
-                            ),
-                          )),
+            }),
+            appBar: AppBar(
+              title: Text(
+                'Whot Menu',
+                style: GoogleFonts.inter(color: Colors.white),
+              ),
+              bottom: TabBar(
+                indicatorColor: Colors.white,
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'Available',
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          // fontSize: 18,
+
+                          // height: 0.95,
+                          color: Colors.white),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'Filled Up',
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          // fontSize: 18,
+
+                          // height: 0.95,
+                          color: Colors.white),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'All',
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          // fontSize: 18,
+
+                          // height: 0.95,
+                          color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              backgroundColor: chachaAppBarColor(),
+              actions: [
+                Consumer<WhotGameProvider>(builder: (context, provider, child) {
+                  return IconButton(
+                    icon: const Icon(
+                      Icons.replay_outlined,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => {provider.listGames()},
+                  );
+                })
               ],
-            );
-          },
-        ),
+            ),
+            body:
+                Consumer<WhotGameProvider>(builder: (context, provider, child) {
+              var availableGames = provider.gameList!.games
+                  .where((e) => e.players! < e.noOfPlayers!)
+                  .toList();
+              var FilledGames = provider.gameList!.games
+                  .where((e) => e.players! >= e.noOfPlayers!)
+                  .toList();
+              var all = provider.gameList!.games.toList();
+              return TabBarView(
+                children: [
+                  WhotGameList(
+                    games: availableGames,
+                  ),
+                  WhotGameList(
+                    games: FilledGames,
+                  ),
+                  WhotGameList(
+                    games: all,
+                  )
+                ],
+              );
+            })),
       ),
     );
+  }
+}
+
+class WhotGameList extends StatelessWidget {
+  final List<GameModel>? games;
+  const WhotGameList({Key? key, this.games}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WhotGameProvider>(builder: (context, provider, child) {
+      return Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+              child: games!.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: games!.length,
+                      itemBuilder: (context, index) {
+                        final game = games![index];
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: chachaVeryLightColor(),
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 5,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                              // tileColor: const Color(0xffc16c34),
+                              title: Text(
+                                'Game #${game.game_id}',
+                                style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold,
+                                    // fontSize: 18,
+
+                                    // height: 0.95,
+                                    color: Colors.white),
+                              ),
+                              subtitle: Text(
+                                '(${game.players} / ${game.noOfPlayers}) Players - ${game.listeners} Listeners',
+                                style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.normal,
+                                    // fontSize: 18,
+
+                                    // height: 0.95,
+                                    color: Colors.white),
+                              ),
+                              trailing: provider.currentGame != null &&
+                                      provider.currentGame!.game_id ==
+                                          game.game_id
+                                  ? TextButton(
+                                      onPressed: () async {
+                                        Navigator.pushNamed(
+                                            context, '/whotGame');
+                                      },
+                                      child: Text(
+                                        'Resume Game',
+                                        style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.bold,
+                                            // fontSize: 18,
+
+                                            // height: 0.95,
+                                            color: Colors.white),
+                                      ),
+                                    )
+                                  : TextButton(
+                                      onPressed: () async {
+                                        await provider.setCurrentGame(game);
+                                        // await model.setupListeners(game);
+                                        await provider.setupGame(game);
+                                        print(provider.currentGame);
+                                        print(provider.gameStart);
+                                        Navigator.pushNamed(
+                                            context, '/whotGame');
+                                      },
+                                      child: Text(
+                                        'Start Game',
+                                        style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.bold,
+                                            // fontSize: 18,
+
+                                            // height: 0.95,
+                                            color: Colors.white),
+                                      ),
+                                    )),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                        'No Available Games, Use + icon to create one',
+                        style: GoogleFonts.inter(color: Colors.white),
+                      ),
+                    )),
+        ],
+      );
+    });
   }
 }
