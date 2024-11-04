@@ -53,6 +53,17 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
                 tabs: [
                   Tab(
                     child: Text(
+                      'Now Playing',
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          // fontSize: 18,
+
+                          // height: 0.95,
+                          color: Colors.white),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
                       'Available',
                       style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
@@ -64,18 +75,7 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
                   ),
                   Tab(
                     child: Text(
-                      'Filled Up',
-                      style: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          // fontSize: 18,
-
-                          // height: 0.95,
-                          color: Colors.white),
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      'All',
+                      'Others',
                       style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
                           // fontSize: 18,
@@ -107,17 +107,22 @@ class _WhotMenuScreenState extends State<WhotMenuScreen> {
               var FilledGames = provider.gameList!.games
                   .where((e) => e.players! >= e.noOfPlayers!)
                   .toList();
-              var all = provider.gameList!.games.toList();
+              var joined = provider.currentGame != null
+                  ? provider.gameList!.games
+                      .where((e) => e.game_id == provider.currentGame!.game_id)
+                      .toList()
+                  : <GameModel>[];
+              // var all = provider.gameList!.games.toList();
               return TabBarView(
                 children: [
+                  WhotGameList(
+                    games: joined,
+                  ),
                   WhotGameList(
                     games: availableGames,
                   ),
                   WhotGameList(
                     games: FilledGames,
-                  ),
-                  WhotGameList(
-                    games: all,
                   )
                 ],
               );
@@ -197,26 +202,47 @@ class WhotGameList extends StatelessWidget {
                                             color: Colors.white),
                                       ),
                                     )
-                                  : TextButton(
-                                      onPressed: () async {
-                                        await provider.setCurrentGame(game);
-                                        // await model.setupListeners(game);
-                                        await provider.setupGame(game);
-                                        print(provider.currentGame);
-                                        print(provider.gameStart);
-                                        Navigator.pushNamed(
-                                            context, '/whotGame');
-                                      },
-                                      child: Text(
-                                        'Start Game',
-                                        style: GoogleFonts.inter(
-                                            fontWeight: FontWeight.bold,
-                                            // fontSize: 18,
+                                  : game.players! >= game.noOfPlayers!
+                                      ? TextButton(
+                                          onPressed: () async {
+                                            // await provider.setCurrentGame(game);
+                                            // // await model.setupListeners(game);
+                                            // await provider.setupGame(game);
+                                            // print(provider.currentGame);
+                                            // print(provider.gameStart);
+                                            // Navigator.pushNamed(
+                                            //     context, '/whotGame');
+                                          },
+                                          child: Text(
+                                            'Game Full',
+                                            style: GoogleFonts.inter(
+                                                fontWeight: FontWeight.bold,
+                                                // fontSize: 18,
 
-                                            // height: 0.95,
-                                            color: Colors.white),
-                                      ),
-                                    )),
+                                                // height: 0.95,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      : TextButton(
+                                          onPressed: () async {
+                                            await provider.setCurrentGame(game);
+                                            // await model.setupListeners(game);
+                                            await provider.setupGame(game);
+                                            print(provider.currentGame);
+                                            print(provider.gameStart);
+                                            Navigator.pushNamed(
+                                                context, '/whotGame');
+                                          },
+                                          child: Text(
+                                            'Start Game',
+                                            style: GoogleFonts.inter(
+                                                fontWeight: FontWeight.bold,
+                                                // fontSize: 18,
+
+                                                // height: 0.95,
+                                                color: Colors.white),
+                                          ),
+                                        )),
                         );
                       },
                     )
