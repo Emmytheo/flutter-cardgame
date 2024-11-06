@@ -96,7 +96,7 @@ class WhotGameProvider extends GameProvider {
               playerz!.add(otherPlyer);
             }
           }
-          print('Initial playerz ${playerz!.length}'); 
+          print('Initial playerz ${playerz!.length}');
           // game.players = [player];
           break;
 
@@ -130,6 +130,14 @@ class WhotGameProvider extends GameProvider {
           // Handle pile:top message if needed
           print('Player ${_message['id']} Played');
           print(_message);
+          int idx = playerz!.indexWhere((p) => p.id == _message['id']);
+          for (int i = 0; i < playerz!.length; i++) {
+            if (idx == i) {
+              playerz![idx].lastPlayed = true;
+            } else {
+              playerz![idx].lastPlayed = false;
+            }
+          }
           WhotCardModel discardd = WhotCardModel.fromJson(_message['card']);
           whot_turn.discardz = [discardd];
           break;

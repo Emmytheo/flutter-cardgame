@@ -29,27 +29,30 @@ class PlayerList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: CARD_HEIGHT * size,
-      width: double.infinity,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: otherPlayers.length,
-        itemBuilder: (context, index) {
-          // final card = player!.cards[index];
-          final isDraggable = turn!.currentPlayer == player;
-
-          return PlayerCard(
-                  // card: card,
-                  size: size,
-                  // visible: player!.isHuman,
-                  visible:  true,
-                  onPlayCard: onPlayCard,
-                  index: index,
-                  turn: turn,
-                  player: otherPlayers[index],
-                );
-        },
+    return Container(
+      margin: EdgeInsetsDirectional.only(top: 10),
+      child: SizedBox(
+        height: CARD_HEIGHT * size,
+        width: double.infinity,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: otherPlayers.length,
+          itemBuilder: (context, index) {
+            // final card = player!.cards[index];
+            final isDraggable = turn!.currentPlayer == player;
+      
+            return PlayerCard(
+                    // card: card,
+                    size: size,
+                    // visible: player!.isHuman,
+                    visible:  true,
+                    onPlayCard: onPlayCard,
+                    index: index,
+                    turn: turn,
+                    player: otherPlayers[index],
+                  );
+          },
+        ),
       ),
     );
   }

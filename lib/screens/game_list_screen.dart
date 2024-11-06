@@ -1,4 +1,3 @@
-import 'dart:js_interop';
 
 import 'package:cardgame/constants.dart';
 import 'package:flutter/material.dart';

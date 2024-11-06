@@ -134,7 +134,7 @@ class _WhotGameScreenState extends State<WhotGameScreen> {
                                           children: [
                                             PlayerInfo(
                                                 turn: provider.whot_turn,
-                                                players: provider.playerz),
+                                                players: provider.playerz, discardz: provider.whot_turn.discardz),
                                             PlayerList(
                                               player: provider
                                                   .whot_turn.currentPlayer,

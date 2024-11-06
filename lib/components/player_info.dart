@@ -1,34 +1,61 @@
+import 'package:cardgame/models/card_model.dart';
 import 'package:cardgame/models/turn_model.dart';
+import 'package:cardgame/models/whot_card_model.dart';
 import 'package:cardgame/models/whot_player_model.dart';
 import 'package:cardgame/models/whot_turn_model.dart';
 import 'package:flutter/material.dart';
+import 'package:cardgame/constants.dart';
 
 class PlayerInfo extends StatelessWidget {
   final WhotTurn? turn;
   final List<WhotPlayerModel>? players;
-  const PlayerInfo({Key? key, required this.turn, required this.players})
+  late List<WhotCardModel>? discardz;
+  PlayerInfo(
+      {Key? key,
+      required this.turn,
+      required this.players, this.discardz,
+      })
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black87,
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Text(
-            players!.length > 1 &&
-                    players!.indexWhere((plyr) => plyr.nowPlaying == true) != -1
-                ? (players!.indexWhere((plyr) => plyr.nowPlaying == true) == 0
-                    ? ("Your turn")
-                    : ("Player ${players![players!.indexWhere((plyr) => plyr.nowPlaying == true)].id}'s turn"))
-                : turn!.currentPlayer == players![0]
-                    ? ("Your turn")
-                    : ('Loading Players...'),
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+      // color: Colors.black87,
+      margin: EdgeInsetsDirectional.only(top: 4),
+      decoration: BoxDecoration(
+        color: chachaVeryLightColor(),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 5,
+            offset: Offset(0, 2),
           ),
-        ]
+        ],
+      ),
+      // width: double.minPositive,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                players!.length > 1 &&
+                        players!.indexWhere(
+                                (plyr) => plyr.nowPlaying == true) !=
+                            -1
+                    ? (players!.indexWhere((plyr) => plyr.nowPlaying == true) ==
+                            0
+                        ? ("Your turn" '${players!.indexWhere((plyr) => plyr.lastPlayed == true) != -1 && discardz!.isNotEmpty && discardz![0].iNeed != null ? ' - Player ${players![players!.indexWhere((plyr) => plyr.lastPlayed == true)].id} needs a ${discardz![0].iNeed}' : ' '}'  )
+                        : ("Player ${players![players!.indexWhere((plyr) => plyr.nowPlaying == true)].id}'s turn"))
+                    : turn!.currentPlayer == players![0]
+                        ? ("Your turn")
+                        : ('Loading Players...'),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+              ),
+            ]
 
             // turn!.players!.map((p) {
             //   final isCurrent = turn!.currentPlayer == p;

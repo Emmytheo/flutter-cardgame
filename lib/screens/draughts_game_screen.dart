@@ -49,14 +49,31 @@ class DraughtsGameScreen extends StatelessWidget {
 
             return Column(
               children: [
-                Text(
-                  provider.yourTurn
-                      ? "It's your turn"
-                      : "Waiting for opponent...",
-                  style: GoogleFonts.inter(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                Container(
+                  margin: EdgeInsetsDirectional.only(top: 4),
+                  decoration: BoxDecoration(
+                    color: chachaVeryLightColor(),
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Text(
+                      provider.yourTurn
+                          ? "It's your turn"
+                          : "Waiting for opponent...",
+                      style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Expanded(

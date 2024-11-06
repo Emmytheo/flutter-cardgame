@@ -18,6 +18,7 @@ class WhotCardModel {
   final String move;
   final int score;
   final String image;
+  late String? iNeed;
 
   WhotCardModel({
     required this.value,
@@ -25,6 +26,7 @@ class WhotCardModel {
     required this.move,
     required this.score,
     required this.image,
+    this.iNeed,
   });
 
   factory WhotCardModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class WhotCardModel {
       shape: json['shape'],
       move: json['move'],
       score: json['score'],
+      iNeed: json['iNeed'],
     );
   }
 
@@ -48,9 +51,9 @@ class WhotCardModel {
       case "TRIANGLE":
         return Shape.Triangle;
       case "CROSS":
-        return Shape.Triangle;
+        return Shape.Cross;
       case "WHOT":
-        return Shape.Triangle;
+        return Shape.Whot;
       default:
         return Shape.Other;
     }

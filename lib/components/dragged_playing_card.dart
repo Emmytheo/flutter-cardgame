@@ -68,23 +68,78 @@ class DraggedPlayingCard extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.center,
-                  child: Text("${card.shape}", style: TextStyle(fontSize: 14.0),),
+                  child: card.shape == 'Whot'
+                      ? Text(card.shape, style: TextStyle(fontSize: 14))
+                      : Image.asset(
+                          card.image,
+                          width: 80,
+                        ),
                 ),
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("${card.value}", style: TextStyle(fontSize: 12)),
+                      card.shape == 'Whot'
+                          ? const SizedBox(
+                              height: 2,
+                            )
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            )
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.topRight,
-                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("${card.value}", style: TextStyle(fontSize: 12)),
+                      card.shape == 'Whot'
+                          ? const SizedBox(height: 2,)
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            )
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      card.shape == 'Whot'
+                          ? const SizedBox(
+                              height: 2,
+                            )
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            ),
+                      Text("${card.value}", style: TextStyle(fontSize: 12)),
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: Text("${card.value}", style: TextStyle(fontSize: 12.0)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      card.shape == 'Whot'
+                          ? const SizedBox(
+                              height: 2,
+                            )
+                          : Image.asset(
+                              card.image,
+                              width: 20,
+                            ),
+                      Text("${card.value}", style: TextStyle(fontSize: 12),),
+                    ],
+                  ),
                 ),
               ],
             ),
